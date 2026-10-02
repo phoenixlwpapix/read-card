@@ -7,6 +7,7 @@ import { Stage, type StageHandle } from './components/Stage';
 import { Inspector } from './components/Inspector';
 import { ProjectModal } from './components/ProjectModal';
 import { SaveProjectModal } from './components/SaveProjectModal';
+import { NewProjectModal, type NewProjectOptions } from './components/NewProjectModal';
 import { ConfirmModal } from './components/ConfirmModal';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 import { exportFonts } from './exportFonts';
@@ -62,6 +63,7 @@ export default function App() {
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState<boolean>(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isCopying, setIsCopying] = useState<boolean>(false);
@@ -203,43 +205,77 @@ export default function App() {
     });
   }, [handleConfigChange, addToast]);
 
-  // Start a fresh new project (clears article title, content, author, image; preserves brand & styles)
-  const handleNewProject = useCallback(() => {
-    const hasContent = Boolean(
-      config.articleTitle.trim() ||
-      config.articleContent.trim() ||
-      config.imageUrl
-    );
+  // Handle new project creation with customized keep/reset options
+  const handleConfirmNewProject = useCallback(
+    (options: NewProjectOptions) => {
+      setConfig((prev) => {
+        const next: CardConfig = { ...prev };
 
-    const executeNewProject = () => {
-      setConfig((prev) => ({
-        ...prev,
-        articleTitle: '',
-        articleContent: '',
-        author: '',
-        imageUrl: '',
-        showImage: false,
-      }));
+        // 1. Identity (cardHeading, volume, tagline, avatar)
+        if (!options.keepIdentity) {
+          next.cardHeading = INITIAL_CONFIG.cardHeading;
+          next.volume = INITIAL_CONFIG.volume;
+          next.tagline = INITIAL_CONFIG.tagline;
+          next.showAvatar = INITIAL_CONFIG.showAvatar;
+          next.avatarUrl = '';
+          next.avatarShape = INITIAL_CONFIG.avatarShape;
+          next.avatarSize = INITIAL_CONFIG.avatarSize;
+        }
+
+        // 2. Visual & Layout (theme, fontFamily, fontWeight, fontSize, lineHeight, aspectRatio, texture)
+        if (!options.keepVisual) {
+          next.theme = INITIAL_CONFIG.theme;
+          next.fontFamily = INITIAL_CONFIG.fontFamily;
+          next.fontWeight = INITIAL_CONFIG.fontWeight;
+          next.fontSize = INITIAL_CONFIG.fontSize;
+          next.lineHeight = INITIAL_CONFIG.lineHeight;
+          next.showTexture = INITIAL_CONFIG.showTexture;
+          next.textureType = INITIAL_CONFIG.textureType;
+          next.textureIntensity = INITIAL_CONFIG.textureIntensity;
+          next.aspectRatio = INITIAL_CONFIG.aspectRatio;
+        }
+
+        // 3. Card Image (imageUrl, showImage)
+        if (!options.keepImage) {
+          next.imageUrl = '';
+          next.showImage = false;
+        }
+
+        // 4. Footer (showFooter, footerText)
+        if (!options.keepFooter) {
+          next.showFooter = false;
+          next.footerText = '';
+        }
+
+        // 5. Title & Author (articleTitle, author)
+        if (!options.keepTitle) {
+          next.articleTitle = '';
+          next.author = '';
+        }
+
+        // 6. Content (articleContent)
+        if (!options.keepContent) {
+          next.articleContent = '';
+        }
+
+        return next;
+      });
+
+      // Reset project binding
       setActiveProject(null);
       idbSet(ACTIVE_PROJECT_KEY, null);
       setCurrentPage(0);
-      setConfirmModal((m) => ({ ...m, isOpen: false }));
-      addToast('已新建空白卡片项目，保留了您的品牌与排版样式', 'success');
-    };
 
-    if (hasContent || activeProject) {
-      setConfirmModal({
-        isOpen: true,
-        title: '新建卡片项目？',
-        description: '将清空当前画布上的文章标题、正文及配图，并为您保留专栏名称、头像、排版风格与页脚引流设置。未保存的草稿将被重置。',
-        confirmLabel: '确认新建',
-        variant: 'primary',
-        onConfirm: executeNewProject,
-      });
-    } else {
-      addToast('当前已是空白卡片项目', 'info');
-    }
-  }, [config.articleTitle, config.articleContent, config.imageUrl, activeProject, addToast]);
+      const keptCount = Object.values(options).filter(Boolean).length;
+      addToast(
+        keptCount === 0
+          ? '已新建纯净空白卡片项目'
+          : `已新建卡片项目（已保留选中的 ${keptCount} 项配置）`,
+        'success'
+      );
+    },
+    [addToast]
+  );
 
   // Request reset all configuration confirmation
   const handleRequestReset = useCallback(() => {
@@ -535,7 +571,7 @@ export default function App() {
         currentPage={currentPage}
         onPageChange={setCurrentPage}
         onSaveProject={() => setIsSaveModalOpen(true)}
-        onNewProject={handleNewProject}
+        onNewProject={() => setIsNewProjectModalOpen(true)}
         activeProjectName={activeProject?.name}
       />
 
@@ -549,6 +585,13 @@ export default function App() {
         isExporting={isExporting}
         isCopying={isCopying}
         totalPages={pages.length}
+      />
+
+      {/* New Project Customizer Modal */}
+      <NewProjectModal
+        isOpen={isNewProjectModalOpen}
+        onClose={() => setIsNewProjectModalOpen(false)}
+        onConfirm={handleConfirmNewProject}
       />
 
       {/* Quick Save Project Modal */}
