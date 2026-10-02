@@ -5,8 +5,8 @@ import {
   Upload,
   RotateCcw,
   LayoutTemplate,
-  Bold,
   Italic,
+  Highlighter,
   ClipboardPaste,
   FileText,
   SlidersHorizontal,
@@ -378,11 +378,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   type="button"
                   onClick={handleInsertBold}
-                  className="text-zinc-700 hover:text-zinc-950 font-bold px-2 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="为选中文本加粗 (**加黑**)"
+                  className="text-amber-900 hover:text-amber-950 font-bold px-2 py-0.5 rounded bg-amber-100/80 hover:bg-amber-100 border border-amber-300/60 flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+                  title="为选中文本添加主题底色重点高亮 (**重点文字**)"
                 >
-                  <Bold className="w-3 h-3" />
-                  <span>加黑</span>
+                  <Highlighter className="w-3 h-3 text-amber-700" />
+                  <span>重点高亮</span>
                 </button>
                 <button
                   type="button"
@@ -421,7 +421,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               rows={14}
               value={config.articleContent}
               onChange={(e) => onChange({ articleContent: e.target.value })}
-              placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **加黑重点文字** 与 *斜体*。"
+              placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **重点高亮文字**（主题匹配底色）与 *斜体*。"
               className="w-full flex-1 min-h-[280px] px-3.5 py-3 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-800 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors leading-relaxed resize-y font-serif"
               spellCheck={false}
             />

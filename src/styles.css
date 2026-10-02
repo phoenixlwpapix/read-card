@@ -150,6 +150,46 @@
   color: #6c544c;
 }
 
+/* Card Highlight (Theme-matched emphasis background for **bold** text) */
+.card-highlight {
+  display: inline;
+  padding: 1px 6px;
+  margin: 0 1.5px;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  font-weight: 700;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.card-theme-paper .card-highlight {
+  background-color: rgba(248, 212, 71, 0.45);
+  color: #1a1610;
+}
+
+.card-theme-minimal .card-highlight {
+  background-color: #fef08a;
+  color: #18181b;
+}
+
+.card-theme-dark .card-highlight {
+  background-color: rgba(245, 158, 11, 0.28);
+  color: #fef08a;
+  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.4);
+}
+
+.card-theme-matcha .card-highlight {
+  background-color: rgba(77, 124, 80, 0.22);
+  color: #132214;
+  box-shadow: inset 0 0 0 1px rgba(77, 124, 80, 0.28);
+}
+
+.card-theme-warm .card-highlight {
+  background-color: rgba(234, 88, 12, 0.22);
+  color: #271711;
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.28);
+}
+
 /* Article Illustration Float and Layout */
 .card-illustration-float {
   float: right;

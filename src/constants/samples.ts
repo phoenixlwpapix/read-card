@@ -15,7 +15,7 @@ export const SAMPLE_ARTICLES: { name: string; config: Partial<CardConfig> }[] = 
       avatarSize: 56,
       articleTitle: 'The Art of Slow Reading in a Hurried World',
       author: 'Marcel Proust & Henry David Thoreau',
-      articleContent: `In an era of relentless speed and endless scrolling, slow reading has become an act of quiet rebellion. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
+      articleContent: `In an era of relentless speed and endless scrolling, **slow reading** has become an act of **quiet rebellion**. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
 
 When we read slowly, we listen not just to what the author is saying, but to the pauses between thoughts. We allow ideas to resonate, finding echoes in our own lived experience.
 
@@ -46,9 +46,9 @@ When we read slowly, we listen not just to what the author is saying, but to the
       avatarSize: 56,
       articleTitle: 'Deep Work: Cultivating Focus in a Distracted Age',
       author: 'Cal Newport',
-      articleContent: `The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. As a consequence, the few who cultivate this skill, and then make it the core of their working life, will thrive.
+      articleContent: `The ability to perform **deep work** is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. As a consequence, the few who cultivate this skill, and then make it the core of their working life, will thrive.
 
-Deep work is not a nostalgic luxury; it is a pragmatic necessity. To produce at your peak level you need to work for extended periods with full concentration on a single task free from distraction.
+Deep work is not a nostalgic luxury; it is a pragmatic necessity. To produce at your peak level you need to work for extended periods with **full concentration** on a single task free from distraction.
 
 True craft requires calm waters. Give your mind the stillness it deserves, and extraordinary ideas will follow naturally.`,
       showImage: false,
@@ -77,7 +77,7 @@ True craft requires calm waters. Give your mind the stillness it deserves, and e
       avatarSize: 56,
       articleTitle: 'The Beauty of Subtracting the Non-Essential',
       author: 'Antoine de Saint-Exupéry',
-      articleContent: `Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
+      articleContent: `**Perfection is achieved**, not when there is nothing more to add, but when there is nothing left to take away.
 
 In life, as in design, we often burden ourselves with clutter under the illusion of enrichment. But true elegance lies in the courage to strip away the superfluous until only the essential remains.
 
@@ -108,7 +108,7 @@ export const INITIAL_CONFIG: CardConfig = {
   avatarSize: 56,
   articleTitle: 'The Art of Slow Reading in a Hurried World',
   author: 'Editorial Team',
-  articleContent: `In an era of relentless speed and endless scrolling, slow reading has become an act of quiet rebellion. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
+  articleContent: `In an era of relentless speed and endless scrolling, **slow reading** has become an act of **quiet rebellion**. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
 
 When we read slowly, we listen not just to what the author is saying, but to the pauses between sentences. We allow ideas to resonate, finding echoes in our own memories and convictions.
 

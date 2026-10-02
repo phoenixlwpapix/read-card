@@ -17,14 +17,14 @@ function renderMarkdownInline(text: string) {
   return parts.map((part, pIdx) => {
     if (part.startsWith('***') && part.endsWith('***') && part.length > 6) {
       return (
-        <strong key={pIdx} className="font-bold italic">
+        <strong key={pIdx} className="font-bold italic card-highlight">
           {part.slice(3, -3)}
         </strong>
       );
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
       return (
-        <strong key={pIdx} className="font-bold underline-offset-4">
+        <strong key={pIdx} className="font-bold card-highlight">
           {part.slice(2, -2)}
         </strong>
       );
