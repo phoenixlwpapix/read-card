@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   Upload,
   Trash2,
@@ -31,8 +31,6 @@ interface InspectorProps {
   totalPages: number;
 }
 
-type TabType = 'image' | 'style' | 'all';
-
 export const Inspector: React.FC<InspectorProps> = ({
   config,
   onChange,
@@ -43,7 +41,6 @@ export const Inspector: React.FC<InspectorProps> = ({
   isCopying,
   totalPages,
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('image');
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageFile = async (file?: File) => {
@@ -128,58 +125,10 @@ export const Inspector: React.FC<InspectorProps> = ({
         </div>
       </div>
 
-      {/* Tab Segment Switcher */}
-      <div className="px-4 py-2 bg-zinc-100/70 border-b border-zinc-200/80 shrink-0">
-        <div className="flex items-center gap-1 bg-zinc-200/70 p-0.5 rounded-lg text-xs">
-          <button
-            type="button"
-            onClick={() => setActiveTab('image')}
-            className={`flex-1 py-1.5 px-2 rounded-md font-medium flex items-center justify-center gap-1.5 transition-all ${
-              activeTab === 'image'
-                ? 'bg-white text-zinc-900 font-bold shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            <ImageIcon className="w-3.5 h-3.5 text-amber-600" />
-            <span>配图构图</span>
-            {config.showImage && config.imageUrl && (
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('style')}
-            className={`flex-1 py-1.5 px-2 rounded-md font-medium flex items-center justify-center gap-1.5 transition-all ${
-              activeTab === 'style'
-                ? 'bg-white text-zinc-900 font-bold shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            <Palette className="w-3.5 h-3.5 text-emerald-600" />
-            <span>配色排版</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('all')}
-            className={`py-1.5 px-2.5 rounded-md font-medium flex items-center justify-center gap-1 transition-all ${
-              activeTab === 'all'
-                ? 'bg-white text-zinc-900 font-bold shadow-xs'
-                : 'text-zinc-500 hover:text-zinc-800'
-            }`}
-            title="全部展示"
-          >
-            <span>全部</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Inspector Scroll Area */}
+      {/* Main Inspector Scroll Area - Displaying all controls seamlessly */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5 text-xs text-zinc-700">
-        {/* ===================== TAB 1: 配图构图 ===================== */}
-        {(activeTab === 'image' || activeTab === 'all') && (
-          <div className="space-y-3.5 bg-white p-3.5 rounded-xl border border-zinc-200/90 shadow-2xs">
+        {/* Section 1: 文章配图设置 */}
+        <div className="space-y-3.5 bg-white p-3.5 rounded-xl border border-zinc-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-zinc-900 flex items-center gap-1.5">
                 <ImageIcon className="w-4 h-4 text-amber-600" />
@@ -429,10 +378,8 @@ export const Inspector: React.FC<InspectorProps> = ({
               </p>
             )}
           </div>
-        )}
 
-        {/* ===================== TAB 2: 配色与排版 ===================== */}
-        {(activeTab === 'style' || activeTab === 'all') && (
+          {/* Section 2: 配色与排版风格 */}
           <div className="space-y-4">
             {/* Theme selection */}
             <div className="bg-white p-3.5 rounded-xl border border-zinc-200/90 shadow-2xs space-y-2.5">
@@ -631,7 +578,6 @@ export const Inspector: React.FC<InspectorProps> = ({
               </div>
             </div>
           </div>
-        )}
       </div>
 
       {/* Pinned Inspector Footer - Quick Export & Actions */}
