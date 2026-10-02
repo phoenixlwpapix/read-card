@@ -29,7 +29,8 @@ export function usePagination(config: CardConfig) {
       // Footer: 0 (removed)
       const hasTitle = Boolean(config.articleTitle.trim());
       const headerEstimate = (hasTitle ? 123 : 68) + (config.author ? 24 : 0);
-      const footerEstimate = 0;
+      const hasFooter = config.showFooter ?? true;
+      const footerEstimate = hasFooter ? 48 : 0;
       const verticalPadding = 78;
       let availableHeight = cardHeight - headerEstimate - footerEstimate - verticalPadding;
 
@@ -163,6 +164,7 @@ export function usePagination(config: CardConfig) {
     config.articleTitle,
     config.bannerHeight,
     config.aspectRatio,
+    config.showFooter,
   ]);
 
   return pages;

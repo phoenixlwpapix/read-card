@@ -125,6 +125,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
               config={config}
               paragraphs={currentParagraphs}
               pageIndex={safeCurrentPage}
+              totalPages={totalPages}
             />
           </div>
         </div>

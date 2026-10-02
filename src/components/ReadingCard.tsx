@@ -7,6 +7,7 @@ interface ReadingCardProps {
   config: CardConfig;
   paragraphs: string[];
   pageIndex: number;
+  totalPages?: number;
 }
 
 function renderMarkdownInline(text: string) {
@@ -40,7 +41,7 @@ function renderMarkdownInline(text: string) {
 }
 
 export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
-  function ReadingCard({ config, paragraphs, pageIndex }, ref) {
+  function ReadingCard({ config, paragraphs, pageIndex, totalPages = 1 }, ref) {
     const isFirstPage = pageIndex === 0;
 
     // Theme class
@@ -277,6 +278,19 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
             </div>
           )}
         </main>
+
+        {/* Card Footer (Optional - Default ON) */}
+        {(config.showFooter ?? true) && (
+          <footer className="shrink-0 pt-3.5 mt-2 border-t card-border-line flex items-center justify-between text-xs tracking-widest font-semibold uppercase card-eyebrow-text relative z-1">
+            <span className="truncate max-w-[550px]">
+              {config.footerText || 'ONE ARTICLE. A NEW PERSPECTIVE.'}
+            </span>
+            <span className="font-mono tracking-widest font-bold shrink-0">
+              {String(pageIndex + 1).padStart(2, '0')} /{' '}
+              {String(Math.max(1, totalPages || 1)).padStart(2, '0')}
+            </span>
+          </footer>
+        )}
       </div>
     );
   }

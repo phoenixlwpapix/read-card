@@ -72,6 +72,7 @@ export interface CardConfig {
   textureType?: TextureType;
   textureIntensity?: TextureIntensity;
   footerText: string;
+  showFooter?: boolean;
   aspectRatio?: CardAspectRatio;
 }
 

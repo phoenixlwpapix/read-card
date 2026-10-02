@@ -30,6 +30,7 @@ When we read slowly, we listen not just to what the author is saying, but to the
       showTexture: true,
       textureType: 'paper',
       textureIntensity: 'medium',
+      showFooter: true,
       footerText: 'ONE ARTICLE. A NEW PERSPECTIVE.',
     },
   },
@@ -60,6 +61,7 @@ True craft requires calm waters. Give your mind the stillness it deserves, and e
       showTexture: true,
       textureType: 'linen',
       textureIntensity: 'medium',
+      showFooter: true,
       footerText: 'DEPTH OVER SPEED · CLARITY OVER NOISE',
     },
   },
@@ -90,6 +92,7 @@ When you remove the noise, the melody of your life finally becomes audible. Ever
       showTexture: false,
       textureType: 'none',
       textureIntensity: 'light',
+      showFooter: true,
       footerText: 'LESS IS MORE · SIMPLICITY IS SOPHISTICATION',
     },
   },
@@ -127,6 +130,7 @@ When we read slowly, we listen not just to what the author is saying, but to the
   textureType: 'paper',
   textureIntensity: 'medium',
   aspectRatio: '3:4',
+  showFooter: true,
   footerText: 'ONE ARTICLE. A NEW PERSPECTIVE.',
 };
 

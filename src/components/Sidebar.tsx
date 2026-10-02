@@ -440,6 +440,62 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
+        {/* Block 3: 卡片页脚与标语 */}
+        <div className="space-y-3 bg-white p-4 rounded-xl border border-zinc-200/90 shadow-2xs">
+          <div className="flex items-center justify-between font-bold text-zinc-900">
+            <span className="flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded bg-amber-100 text-amber-900 flex items-center justify-center text-[10px] font-mono">3</span>
+              卡片页脚与标语
+            </span>
+            <label className="flex items-center gap-1.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={config.showFooter ?? true}
+                onChange={(e) => onChange({ showFooter: e.target.checked })}
+                className="w-3.5 h-3.5 text-amber-600 rounded border-zinc-300 focus:ring-amber-500 cursor-pointer"
+              />
+              <span className="text-[11px] font-semibold text-zinc-800">
+                {(config.showFooter ?? true) ? '已开启' : '已关闭'}
+              </span>
+            </label>
+          </div>
+
+          {(config.showFooter ?? true) ? (
+            <div className="space-y-2 pt-0.5">
+              <div>
+                <label htmlFor="card-footer-input" className="block text-[11px] font-medium text-zinc-600 mb-1">
+                  底部寄语 / 标语文案
+                </label>
+                <input
+                  id="card-footer-input"
+                  type="text"
+                  value={config.footerText ?? ''}
+                  onChange={(e) => onChange({ footerText: e.target.value })}
+                  placeholder="如：ONE ARTICLE. A NEW PERSPECTIVE."
+                  maxLength={60}
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors font-medium"
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                <span>右侧自动呈现双位数页码（如 01 / 02）</span>
+                {config.footerText && (
+                  <button
+                    type="button"
+                    onClick={() => onChange({ footerText: '' })}
+                    className="hover:text-zinc-600 cursor-pointer"
+                  >
+                    清空文案
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="text-[11px] text-zinc-400 py-0.5">
+              页脚已关闭，卡片正文底部可多容纳约 3~5 行文字。
+            </p>
+          )}
+        </div>
+
         {/* Quick hint banner leading to the Right Inspector */}
         <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center gap-2.5">
           <div className="w-6 h-6 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
