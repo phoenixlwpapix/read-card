@@ -7,6 +7,7 @@ import {
   LayoutTemplate,
   Italic,
   Highlighter,
+  RemoveFormatting,
   ClipboardPaste,
   FileText,
   SlidersHorizontal,
@@ -23,6 +24,7 @@ interface SidebarProps {
   onOpenProjectModal: () => void;
   totalPages: number;
   currentPage: number;
+  onToast?: (text: string, type?: 'success' | 'error' | 'info') => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -33,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenProjectModal,
   totalPages,
   currentPage,
+  onToast,
 }) => {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -91,6 +94,107 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
+  // Clear formatting from selected text or from entire text if nothing selected
+  const handleClearFormatting = () => {
+    const el = textareaRef.current;
+    const text = config.articleContent;
+    if (!text) return;
+
+    const stripMarkers = (str: string) => {
+      return str
+        .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\*([^*]+)\*/g, '$1')
+        .replace(/___([^_]+)___/g, '$1')
+        .replace(/__([^_]+)__/g, '$1')
+        .replace(/(^|[^\w])_([^_]+)_(?=[^\w]|$)/g, '$1$2')
+        .replace(/~~([^~]+)~~/g, '$1')
+        .replace(/==([^=]+)==/g, '$1')
+        .replace(/`([^`]+)`/g, '$1');
+    };
+
+    if (!el) {
+      const cleaned = stripMarkers(text);
+      if (cleaned !== text) {
+        onChange({ articleContent: cleaned });
+        onToast?.('已一键清空全文排版格式', 'success');
+      } else {
+        onToast?.('当前文本无格式标记', 'info');
+      }
+      return;
+    }
+
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+
+    if (start !== end) {
+      let selStart = start;
+      let selEnd = end;
+      let selected = text.slice(selStart, selEnd);
+
+      // Check if formatting markers are wrapped immediately around the selection
+      // e.g. user double-clicked word inside **word**
+      if (
+        selStart >= 3 &&
+        selEnd + 3 <= text.length &&
+        text.slice(selStart - 3, selStart) === '***' &&
+        text.slice(selEnd, selEnd + 3) === '***'
+      ) {
+        selStart -= 3;
+        selEnd += 3;
+        selected = text.slice(selStart, selEnd);
+      } else if (
+        selStart >= 2 &&
+        selEnd + 2 <= text.length &&
+        text.slice(selStart - 2, selStart) === '**' &&
+        text.slice(selEnd, selEnd + 2) === '**'
+      ) {
+        selStart -= 2;
+        selEnd += 2;
+        selected = text.slice(selStart, selEnd);
+      } else if (
+        selStart >= 1 &&
+        selEnd + 1 <= text.length &&
+        text.slice(selStart - 1, selStart) === '*' &&
+        text.slice(selEnd, selEnd + 1) === '*' &&
+        text.slice(selStart - 2, selStart) !== '**'
+      ) {
+        selStart -= 1;
+        selEnd += 1;
+        selected = text.slice(selStart, selEnd);
+      }
+
+      const stripped = stripMarkers(selected);
+      if (stripped === selected) {
+        onToast?.('所选文本未包含排版格式', 'info');
+        return;
+      }
+
+      const updated = text.slice(0, selStart) + stripped + text.slice(selEnd);
+      onChange({ articleContent: updated });
+      onToast?.('已清空选中文字排版格式', 'success');
+
+      setTimeout(() => {
+        el.focus();
+        el.setSelectionRange(selStart, selStart + stripped.length);
+      }, 0);
+    } else {
+      // No text selected: clear formatting across the whole article
+      const cleaned = stripMarkers(text);
+      if (cleaned === text) {
+        onToast?.('当前正文无排版格式', 'info');
+        return;
+      }
+
+      onChange({ articleContent: cleaned });
+      onToast?.('已一键清空全文格式（保留纯文本）', 'success');
+      setTimeout(() => {
+        el.focus();
+        el.setSelectionRange(start, start);
+      }, 0);
+    }
+  };
+
   // Avatar file upload handler
   const handleAvatarFile = async (file?: File) => {
     if (!file) return;
@@ -108,6 +212,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       const text = await navigator.clipboard.readText();
       if (text) {
         onChange({ articleContent: text });
+        onToast?.('已从剪贴板粘贴正文', 'success');
       }
     } catch {
       // Fallback: user can paste directly into textarea
@@ -367,66 +472,97 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* 文章正文与工具栏 */}
-          <div className="space-y-2 flex-1 flex flex-col pt-1">
+          <div className="space-y-1.5 flex-1 flex flex-col pt-1">
+            {/* Header row: Label on left, Paste & Clear on right */}
             <div className="flex items-center justify-between">
-              <label htmlFor="article-content-textarea" className="block text-[11px] font-medium text-zinc-600">
-                文章正文
+              <label
+                htmlFor="article-content-textarea"
+                className="text-[11px] font-medium text-zinc-700 flex items-center gap-1.5"
+              >
+                <span>文章正文</span>
+                <span className="text-[10px] text-zinc-400 font-normal">（自动排版分页）</span>
               </label>
 
-              {/* Text editing toolbar */}
               <div className="flex items-center gap-1 text-[11px]">
                 <button
                   type="button"
-                  onClick={handleInsertBold}
-                  className="text-amber-900 hover:text-amber-950 font-bold px-2 py-0.5 rounded bg-amber-100/80 hover:bg-amber-100 border border-amber-300/60 flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
-                  title="为选中文本添加主题底色重点高亮 (**重点文字**)"
-                >
-                  <Highlighter className="w-3 h-3 text-amber-700" />
-                  <span>重点高亮</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleInsertItalic}
-                  className="text-zinc-700 hover:text-zinc-950 italic px-2 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="为选中文本倾斜 (*斜体*)"
-                >
-                  <Italic className="w-3 h-3" />
-                  <span>斜体</span>
-                </button>
-                <span className="text-zinc-300">|</span>
-                <button
-                  type="button"
                   onClick={handlePasteArticle}
-                  className="text-amber-800 hover:text-amber-900 px-2 py-0.5 rounded bg-amber-50 hover:bg-amber-100 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="粘贴剪贴板内容"
+                  className="text-amber-800 hover:text-amber-950 px-2 py-0.5 rounded bg-amber-50 hover:bg-amber-100/80 border border-amber-200/70 flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
+                  title="从剪贴板粘贴内容"
                 >
-                  <ClipboardPaste className="w-3 h-3" />
+                  <ClipboardPaste className="w-3 h-3 text-amber-700" />
                   <span>粘贴</span>
                 </button>
+
                 <span className="text-zinc-300">|</span>
+
                 <button
                   type="button"
                   onClick={onRequestClearText}
-                  className="text-zinc-400 hover:text-red-600 px-1.5 py-0.5 rounded hover:bg-red-50 transition-colors cursor-pointer"
-                  title="清空文章正文"
+                  className="text-zinc-400 hover:text-red-600 px-1.5 py-0.5 rounded hover:bg-red-50 flex items-center gap-1 transition-colors cursor-pointer"
+                  title="清空文章全部正文"
                 >
-                  清空
+                  <Trash2 className="w-3 h-3" />
+                  <span>清空</span>
                 </button>
               </div>
             </div>
 
-            <textarea
-              ref={textareaRef}
-              id="article-content-textarea"
-              rows={14}
-              value={config.articleContent}
-              onChange={(e) => onChange({ articleContent: e.target.value })}
-              placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **重点高亮文字**（主题匹配底色）与 *斜体*。"
-              className="w-full flex-1 min-h-[280px] px-3.5 py-3 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-800 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors leading-relaxed resize-y font-serif"
-              spellCheck={false}
-            />
+            {/* Unified Editor Card Box */}
+            <div className="flex-1 flex flex-col rounded-lg border border-zinc-200 overflow-hidden focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500 transition-colors bg-white shadow-2xs">
+              {/* Text formatting toolbar strip */}
+              <div className="bg-zinc-100/75 border-b border-zinc-200/80 px-2.5 py-1.5 flex items-center justify-between gap-1 select-none">
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleInsertBold}
+                    className="text-amber-900 hover:text-amber-950 font-bold px-2 py-1 rounded-md bg-amber-100/80 hover:bg-amber-100 border border-amber-300/60 flex items-center gap-1 text-[11px] transition-colors cursor-pointer shadow-2xs"
+                    title="为选中文本添加主题底色重点高亮 (**重点文字**)"
+                  >
+                    <Highlighter className="w-3.5 h-3.5 text-amber-700" />
+                    <span>重点高亮</span>
+                  </button>
 
-            <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleInsertItalic}
+                    className="text-zinc-700 hover:text-zinc-950 italic px-2 py-1 rounded-md bg-white hover:bg-zinc-50 border border-zinc-200/80 flex items-center gap-1 text-[11px] transition-colors cursor-pointer shadow-2xs"
+                    title="为选中文本倾斜 (*斜体*)"
+                  >
+                    <Italic className="w-3.5 h-3.5 text-zinc-600" />
+                    <span>斜体</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClearFormatting}
+                    className="text-zinc-700 hover:text-zinc-950 px-2 py-1 rounded-md bg-white hover:bg-zinc-50 border border-zinc-200/80 flex items-center gap-1 text-[11px] transition-colors cursor-pointer shadow-2xs"
+                    title="一键清除选中文字或全文的所有重点高亮与斜体排版格式"
+                  >
+                    <RemoveFormatting className="w-3.5 h-3.5 text-zinc-500" />
+                    <span>清空格式</span>
+                  </button>
+                </div>
+
+                <span className="text-[10px] text-zinc-400 font-mono hidden sm:inline" title="支持 Markdown 语法">
+                  Markdown
+                </span>
+              </div>
+
+              {/* Textarea */}
+              <textarea
+                ref={textareaRef}
+                id="article-content-textarea"
+                rows={14}
+                value={config.articleContent}
+                onChange={(e) => onChange({ articleContent: e.target.value })}
+                placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **重点高亮文字**（主题匹配底色）与 *斜体*。"
+                className="w-full flex-1 min-h-[280px] p-3 text-xs text-zinc-800 focus:outline-hidden leading-relaxed resize-y font-serif border-0 bg-transparent"
+                spellCheck={false}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-0.5">
               <span className="flex items-center gap-1.5">
                 <FileText className="w-3 h-3 text-zinc-400" />
                 {wordCount} 词 · {charCount} 字符

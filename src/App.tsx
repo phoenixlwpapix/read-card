@@ -456,6 +456,7 @@ export default function App() {
         onOpenProjectModal={() => setIsProjectModalOpen(true)}
         totalPages={pages.length}
         currentPage={currentPage}
+        onToast={addToast}
       />
 
       {/* Middle: Canvas Stage */}
