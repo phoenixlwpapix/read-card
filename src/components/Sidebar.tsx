@@ -132,9 +132,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <h1 className="text-sm font-bold text-zinc-900 tracking-tight leading-none flex items-center gap-1.5">
-              ReadCard <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">3:4</span>
+              阅笺 <span className="text-xs font-medium text-zinc-400 font-sans tracking-normal">ReadCard</span>
             </h1>
-            <p className="text-[11px] text-zinc-500 mt-0.5">文本与内容创作</p>
+            <p className="text-[11px] text-zinc-500 mt-0.5">美学阅读卡片工坊</p>
           </div>
         </div>
 
@@ -421,7 +421,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               rows={14}
               value={config.articleContent}
               onChange={(e) => onChange({ articleContent: e.target.value })}
-              placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据 3:4 比例自动排版与智能分页。支持 **加黑重点文字** 与 *斜体*。"
+              placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **加黑重点文字** 与 *斜体*。"
               className="w-full flex-1 min-h-[280px] px-3.5 py-3 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-800 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors leading-relaxed resize-y font-serif"
               spellCheck={false}
             />
@@ -461,7 +461,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <RotateCcw className="w-3 h-3" /> 重置所有设置
         </button>
-        <span>3:4 阅读卡片工作台</span>
+        <span>阅笺 · 阅读卡片工作台</span>
       </div>
     </aside>
   );
