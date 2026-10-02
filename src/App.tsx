@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import type { CardConfig, CardProject } from './types';
+import { getCardDimensions, type CardConfig, type CardProject } from './types';
 import { INITIAL_CONFIG } from './constants/samples';
 import { usePagination } from './utils/pagination';
 import { Sidebar } from './components/Sidebar';
@@ -351,10 +351,11 @@ export default function App() {
           const cardEl = stageRef.current?.getCardElement();
           if (!cardEl) continue;
 
+          const dimensions = getCardDimensions(config.aspectRatio);
           const blob = await toBlob(cardEl, {
             pixelRatio: 2,
-            width: 900,
-            height: 1200,
+            width: dimensions.width,
+            height: dimensions.height,
             fontEmbedCSS,
             style: {
               transform: 'none',
@@ -370,7 +371,7 @@ export default function App() {
 
         addToast(
           allPages
-            ? `已成功导出全部 ${count} 页 3:4 阅读卡片！`
+            ? `已成功导出全部 ${count} 页 ${config.aspectRatio || '3:4'} 阅读卡片！`
             : '卡片图片已成功下载！',
           'success'
         );
@@ -386,7 +387,7 @@ export default function App() {
         setIsExporting(false);
       }
     },
-    [isExporting, currentPage, pages.length, config.articleTitle, config.cardHeading, addToast]
+    [isExporting, currentPage, pages.length, config.articleTitle, config.cardHeading, config.aspectRatio, addToast]
   );
 
   // Copy card image to clipboard
@@ -404,10 +405,11 @@ export default function App() {
       const cardEl = stageRef.current?.getCardElement();
       if (!cardEl) throw new Error('未找到卡片元素');
 
+      const dimensions = getCardDimensions(config.aspectRatio);
       const blob = await toBlob(cardEl, {
         pixelRatio: 2,
-        width: 900,
-        height: 1200,
+        width: dimensions.width,
+        height: dimensions.height,
         fontEmbedCSS,
         style: {
           transform: 'none',
@@ -435,7 +437,7 @@ export default function App() {
     } finally {
       setIsCopying(false);
     }
-  }, [isCopying, config.articleTitle, addToast]);
+  }, [isCopying, config.articleTitle, config.aspectRatio, addToast]);
 
   const isExistingUserProject = Boolean(
     activeProject &&

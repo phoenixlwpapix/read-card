@@ -122,6 +122,7 @@ When we read slowly, we listen not just to what the author is saying, but to the
   showTexture: true,
   textureType: 'paper',
   textureIntensity: 'medium',
+  aspectRatio: '3:4',
   footerText: 'ONE ARTICLE. A NEW PERSPECTIVE.',
 };
 

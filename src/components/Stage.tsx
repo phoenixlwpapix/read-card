@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { ChevronLeft, ChevronRight, FolderKanban } from 'lucide-react';
-import type { CardConfig } from '../types';
+import { getCardDimensions, type CardConfig } from '../types';
 import { ReadingCard } from './ReadingCard';
 
 interface StageProps {
@@ -31,11 +31,13 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
   const cardElementRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState<number>(0.55);
 
+  const dimensions = getCardDimensions(config.aspectRatio);
+
   useImperativeHandle(ref, () => ({
     getCardElement: () => cardElementRef.current,
   }));
 
-  // Auto calculate fit scale based on viewport size
+  // Auto calculate fit scale based on viewport size and card dimensions
   useEffect(() => {
     const updateScale = () => {
       if (!containerRef.current) return;
@@ -45,9 +47,8 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
       const availableW = Math.max(200, rect.width - paddingX);
       const availableH = Math.max(200, rect.height - paddingY);
 
-      // Card is 900 x 1200 (3:4)
-      const scaleX = availableW / 900;
-      const scaleY = availableH / 1200;
+      const scaleX = availableW / dimensions.width;
+      const scaleY = availableH / dimensions.height;
       const scale = Math.min(scaleX, scaleY);
       setFitScale(Math.max(0.2, Math.min(1.0, scale)));
     };
@@ -55,7 +56,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
     updateScale();
     window.addEventListener('resize', updateScale);
     return () => window.removeEventListener('resize', updateScale);
-  }, []);
+  }, [dimensions.width, dimensions.height]);
 
   const totalPages = Math.max(1, pages.length);
   const safeCurrentPage = Math.min(currentPage, totalPages - 1);
@@ -70,7 +71,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
             卡片画板
           </span>
           <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-200/70 text-zinc-700 shrink-0">
-            3:4 · 900 × 1200 px
+            {config.aspectRatio || '3:4'} · {dimensions.width} × {dimensions.height} px
           </span>
           {activeProjectName && (
             <span className="text-[11px] text-zinc-600 flex items-center gap-1.5 font-medium truncate max-w-[260px] border-l border-zinc-200 pl-3">
@@ -102,12 +103,12 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
           backgroundPosition: '0 0, 12px 12px',
         }}
       >
-        {/* Scale Container wrapping the 900x1200 reading card */}
+        {/* Scale Container wrapping the reading card */}
         <div
           className="relative transition-transform duration-150 ease-out shrink-0"
           style={{
-            width: `${900 * fitScale}px`,
-            height: `${1200 * fitScale}px`,
+            width: `${dimensions.width * fitScale}px`,
+            height: `${dimensions.height * fitScale}px`,
           }}
         >
           <div
@@ -164,8 +165,10 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
         )}
 
         <div className="flex items-center gap-4 text-zinc-400">
-          <span>高保真 2× 超清导出 (1800 × 2400)</span>
-          <span>按 3:4 比例精准排版</span>
+          <span>
+            高保真 2× 超清导出 ({dimensions.width * 2} × {dimensions.height * 2})
+          </span>
+          <span>按 {config.aspectRatio || '3:4'} 比例精准排版</span>
         </div>
       </footer>
     </main>

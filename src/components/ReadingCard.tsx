@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { User, Bookmark } from 'lucide-react';
-import type { CardConfig, TextureType, TextureIntensity } from '../types';
+import { getCardDimensions, type CardConfig, type TextureType, type TextureIntensity } from '../types';
 import { getProceduralTexture } from '../utils/textureGenerator';
 
 interface ReadingCardProps {
@@ -91,11 +91,16 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
 
     const hasArticleTitle = Boolean(config.articleTitle?.trim());
     const hasAuthor = Boolean(config.author?.trim());
+    const dimensions = getCardDimensions(config.aspectRatio);
 
     return (
       <div
         ref={ref}
         className={`reading-card ${themeClass} shadow-2xl select-text relative`}
+        style={{
+          width: `${dimensions.width}px`,
+          height: `${dimensions.height}px`,
+        }}
       >
         {/* Procedural Canvas Paper / Linen Texture Overlay */}
         {textureDataUrl && (
@@ -268,7 +273,9 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center card-eyebrow-text py-20">
               <p className="text-xl font-medium tracking-wide">在左侧输入或粘贴文章内容</p>
-              <p className="text-sm mt-2 opacity-70">右侧将自动呈现精美的 3:4 比例排版卡片</p>
+              <p className="text-sm mt-2 opacity-70">
+                右侧将自动呈现精美的 {config.aspectRatio || '3:4'} 比例排版卡片
+              </p>
             </div>
           )}
         </main>

@@ -264,7 +264,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                         </span>
 
                         <span className="text-[10px] font-mono text-zinc-400 font-medium">
-                          3:4 卡片
+                          {project.config.aspectRatio || '3:4'} 卡片
                         </span>
                       </div>
 

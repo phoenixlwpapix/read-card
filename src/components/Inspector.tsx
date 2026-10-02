@@ -10,13 +10,15 @@ import {
   Palette,
   Type,
   SlidersHorizontal,
+  Ratio,
 } from 'lucide-react';
-import type {
-  CardConfig,
-  CardTheme,
-  FontFamily,
-  TextureType,
-  TextureIntensity,
+import {
+  ASPECT_RATIOS,
+  type CardConfig,
+  type CardTheme,
+  type FontFamily,
+  type TextureType,
+  type TextureIntensity,
 } from '../types';
 import { optimizeImageFile } from '../utils/imageOptimizer';
 
@@ -379,6 +381,63 @@ export const Inspector: React.FC<InspectorProps> = ({
             )}
           </div>
 
+          {/* Section: 卡片画幅比例选择 */}
+          <div className="bg-white p-3.5 rounded-xl border border-zinc-200/90 shadow-2xs space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-zinc-900 flex items-center gap-1.5">
+                <Ratio className="w-4 h-4 text-indigo-600" />
+                卡片画幅比例
+              </span>
+              <span className="text-[10px] text-zinc-400 font-mono font-medium">
+                默认 3:4
+              </span>
+            </div>
+            <div className="grid grid-cols-4 gap-1.5">
+              {ASPECT_RATIOS.map((item) => {
+                const isSelected = (config.aspectRatio || '3:4') === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => onChange({ aspectRatio: item.id })}
+                    className={`flex flex-col items-center justify-center p-2 rounded-lg border text-center transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-indigo-600 bg-indigo-50/50 text-indigo-950 ring-2 ring-indigo-500/20 shadow-xs'
+                        : 'border-zinc-200 bg-zinc-50/60 hover:bg-zinc-100 hover:border-zinc-300 text-zinc-700'
+                    }`}
+                  >
+                    <div className="h-6 flex items-center justify-center mb-1">
+                      <div
+                        className={`rounded-[2px] border transition-colors ${
+                          isSelected
+                            ? 'border-indigo-600 bg-indigo-200/80'
+                            : 'border-zinc-400/80 bg-zinc-200/70'
+                        }`}
+                        style={{
+                          width: `${Math.max(10, Math.round((item.width / item.height) * 20))}px`,
+                          height: '20px',
+                        }}
+                      />
+                    </div>
+                    <span className="text-xs font-bold leading-tight">{item.name}</span>
+                    <span className="text-[9px] text-zinc-400 mt-0.5 leading-tight truncate w-full text-center">
+                      {item.desc.split(' · ')[0]}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="text-[11px] text-zinc-600 bg-zinc-50 px-2.5 py-1.5 rounded-lg border border-zinc-100 flex items-center justify-between">
+              <span className="truncate">
+                {ASPECT_RATIOS.find((r) => r.id === (config.aspectRatio || '3:4'))?.desc}
+              </span>
+              <span className="font-mono text-[10px] text-zinc-400 shrink-0 ml-2">
+                {ASPECT_RATIOS.find((r) => r.id === (config.aspectRatio || '3:4'))?.width} ×{' '}
+                {ASPECT_RATIOS.find((r) => r.id === (config.aspectRatio || '3:4'))?.height}
+              </span>
+            </div>
+          </div>
+
           {/* Section 2: 配色与排版风格 */}
           <div className="space-y-4">
             {/* Theme selection */}
@@ -624,7 +683,7 @@ export const Inspector: React.FC<InspectorProps> = ({
           >
             恢复初始默认
           </button>
-          <span>3:4 比例超清输出</span>
+          <span>{config.aspectRatio || '3:4'} 比例超清输出</span>
         </div>
       </div>
     </aside>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import type { CardConfig } from '../types';
+import { getCardDimensions, type CardConfig } from '../types';
 
 /**
- * Smart pagination hook for 3:4 reading card (900 x 1200px)
- * Measures actual rendered paragraph heights within the 3:4 container
+ * Smart pagination hook for reading card (supports 3:4, 1:1, 2:3, 9:16)
+ * Measures actual rendered paragraph heights within the container
  */
 export function usePagination(config: CardConfig) {
   const [pages, setPages] = useState<string[][]>([[]]);
@@ -22,8 +22,8 @@ export function usePagination(config: CardConfig) {
         return;
       }
 
-      // Estimate available height in 900x1200 card with header/footer removed
-      // Card height: 1200px
+      // Estimate available height in card with header/footer removed
+      const { height: cardHeight } = getCardDimensions(config.aspectRatio);
       // Top padding: 42px, Bottom padding: 36px (total 78px)
       // Header: title row + article title (~105px)
       // Footer: 0 (removed)
@@ -31,7 +31,7 @@ export function usePagination(config: CardConfig) {
       const headerEstimate = (hasTitle ? 123 : 68) + (config.author ? 24 : 0);
       const footerEstimate = 0;
       const verticalPadding = 78;
-      let availableHeight = 1200 - headerEstimate - footerEstimate - verticalPadding;
+      let availableHeight = cardHeight - headerEstimate - footerEstimate - verticalPadding;
 
       if (config.showImage && config.imageUrl) {
         if (config.imagePosition === 'top-banner') {
@@ -160,6 +160,7 @@ export function usePagination(config: CardConfig) {
     config.isBold,
     config.articleTitle,
     config.bannerHeight,
+    config.aspectRatio,
   ]);
 
   return pages;
