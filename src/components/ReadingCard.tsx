@@ -197,8 +197,7 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
                   className="font-bold tracking-tight leading-tight line-clamp-2"
                   style={{
                     fontSize: '32px',
-                    fontFamily:
-                      "Fraunces, 'Songti SC', 'Source Han Serif SC', Georgia, serif",
+                    fontFamily: getFontStack(config.fontFamily),
                   }}
                 >
                   {config.articleTitle.trim()}
