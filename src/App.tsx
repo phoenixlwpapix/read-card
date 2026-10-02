@@ -46,7 +46,11 @@ export default function App() {
     return [];
   });
 
-  const [activeProject, setActiveProject] = useState<{ id: string; name: string } | null>(() => {
+  const [activeProject, setActiveProject] = useState<{
+    id: string;
+    name: string;
+    savedConfig?: CardConfig;
+  } | null>(() => {
     try {
       const saved = localStorage.getItem(ACTIVE_PROJECT_KEY);
       if (saved) return JSON.parse(saved);
@@ -152,38 +156,17 @@ export default function App() {
     };
   }, []);
 
-  // Continuous reliable persistence to IndexedDB whenever config or activeProject changes
+  // Continuous reliable persistence of active workspace draft to IndexedDB
   useEffect(() => {
     idbSet(CONFIG_KEY, config);
-
-    // If currently editing an existing user project, auto-sync modifications back to the project library!
-    if (activeProject && !activeProject.id.startsWith('builtin-')) {
-      setUserProjects((prev) => {
-        const idx = prev.findIndex((p) => p.id === activeProject.id);
-        if (idx !== -1) {
-          // Only update if changed
-          if (JSON.stringify(prev[idx].config) !== JSON.stringify(config)) {
-            const next = [...prev];
-            next[idx] = {
-              ...next[idx],
-              config: { ...config },
-              updatedAt: Date.now(),
-            };
-            idbSet(PROJECTS_KEY, next);
-            return next;
-          }
-        }
-        return prev;
-      });
-    }
-  }, [config, activeProject]);
+  }, [config]);
 
   // Window beforeunload safeguard: flush latest state synchronously
   useEffect(() => {
     const handleUnload = () => {
       idbSet(CONFIG_KEY, config);
       if (activeProject) {
-        idbSet(ACTIVE_PROJECT_KEY, activeProject);
+        idbSet(ACTIVE_PROJECT_KEY, { id: activeProject.id, name: activeProject.name });
       }
     };
     window.addEventListener('beforeunload', handleUnload);
@@ -250,44 +233,90 @@ export default function App() {
         config: { ...config },
       };
 
-      const next = [newProject, ...userProjects];
+      const previousActiveName = activeProject?.name;
+      const wasExistingUserProject = Boolean(
+        activeProject &&
+          !activeProject.id.startsWith('builtin-') &&
+          userProjects.some((p) => p.id === activeProject.id)
+      );
+
+      // If saving as new project while editing an existing project, restore the original project's initial config
+      let updatedUserProjects = [...userProjects];
+      if (wasExistingUserProject && activeProject?.savedConfig) {
+        const origIdx = updatedUserProjects.findIndex((p) => p.id === activeProject.id);
+        if (origIdx !== -1) {
+          updatedUserProjects[origIdx] = {
+            ...updatedUserProjects[origIdx],
+            config: activeProject.savedConfig,
+          };
+        }
+      }
+
+      const next = [newProject, ...updatedUserProjects];
       setUserProjects(next);
       idbSet(PROJECTS_KEY, next);
 
-      const active = { id: newProject.id, name: newProject.name };
+      const active = {
+        id: newProject.id,
+        name: newProject.name,
+        savedConfig: JSON.parse(JSON.stringify(config)),
+      };
       setActiveProject(active);
-      idbSet(ACTIVE_PROJECT_KEY, active);
+      idbSet(ACTIVE_PROJECT_KEY, { id: newProject.id, name: newProject.name });
 
-      addToast(`项目「${name}」已保存到本地项目库！`, 'success');
+      addToast(
+        wasExistingUserProject
+          ? `已另存为新项目「${name}」！原项目「${previousActiveName}」保持不变。`
+          : `项目「${name}」已保存到本地项目库！`,
+        'success'
+      );
     },
-    [config, userProjects, addToast]
+    [config, userProjects, activeProject, addToast]
   );
 
   // Overwrite & update current active user project
-  const handleUpdateCurrentProject = useCallback(() => {
-    if (!activeProject || activeProject.id.startsWith('builtin-')) return;
-    const idx = userProjects.findIndex((p) => p.id === activeProject.id);
-    if (idx === -1) return;
+  const handleUpdateCurrentProject = useCallback(
+    (updatedName?: string) => {
+      if (!activeProject || activeProject.id.startsWith('builtin-')) return;
+      const idx = userProjects.findIndex((p) => p.id === activeProject.id);
+      if (idx === -1) return;
 
-    const next = [...userProjects];
-    next[idx] = {
-      ...next[idx],
-      config: { ...config },
-      updatedAt: Date.now(),
-    };
+      const finalName = updatedName?.trim() || activeProject.name;
+      const next = [...userProjects];
+      next[idx] = {
+        ...next[idx],
+        name: finalName,
+        config: { ...config },
+        updatedAt: Date.now(),
+      };
 
-    setUserProjects(next);
-    idbSet(PROJECTS_KEY, next);
-    addToast(`项目「${activeProject.name}」已更新保存！`, 'success');
-  }, [activeProject, config, userProjects, addToast]);
+      setUserProjects(next);
+      idbSet(PROJECTS_KEY, next);
+
+      const active = {
+        id: activeProject.id,
+        name: finalName,
+        savedConfig: JSON.parse(JSON.stringify(config)),
+      };
+      setActiveProject(active);
+      idbSet(ACTIVE_PROJECT_KEY, { id: activeProject.id, name: finalName });
+
+      addToast(`项目「${finalName}」已更新保存！`, 'success');
+    },
+    [activeProject, config, userProjects, addToast]
+  );
 
   // Load a project into current workspace
   const handleLoadProject = useCallback(
     (project: CardProject) => {
       setConfig({ ...project.config });
-      const active = { id: project.id, name: project.name };
+      const active = {
+        id: project.id,
+        name: project.name,
+        savedConfig: JSON.parse(JSON.stringify(project.config)),
+      };
       setActiveProject(active);
-      idbSet(ACTIVE_PROJECT_KEY, active);
+      idbSet(ACTIVE_PROJECT_KEY, { id: project.id, name: project.name });
       idbSet(CONFIG_KEY, project.config);
       setCurrentPage(0);
       addToast(`已成功载入项目「${project.name}」`, 'success');

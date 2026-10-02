@@ -5,7 +5,7 @@ interface SaveProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSaveAsNew: (name: string) => void;
-  onUpdateCurrent?: () => void;
+  onUpdateCurrent?: (name?: string) => void;
   activeProjectName?: string | null;
   isExistingUserProject?: boolean;
   defaultName: string;
@@ -50,7 +50,7 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (saveMode === 'update' && onUpdateCurrent) {
-      onUpdateCurrent();
+      onUpdateCurrent(name.trim() || undefined);
       onClose();
       return;
     }
@@ -98,7 +98,10 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
               <div className="flex items-center gap-2 p-1 bg-zinc-100 rounded-xl border border-zinc-200 text-xs">
                 <button
                   type="button"
-                  onClick={() => setSaveMode('update')}
+                  onClick={() => {
+                    setSaveMode('update');
+                    if (activeProjectName) setName(activeProjectName);
+                  }}
                   className={`flex-1 py-2 px-3 rounded-lg font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                     saveMode === 'update'
                       ? 'bg-white text-zinc-900 font-bold shadow-xs'
@@ -110,7 +113,14 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSaveMode('new')}
+                  onClick={() => {
+                    setSaveMode('new');
+                    setName(
+                      activeProjectName
+                        ? `${activeProjectName} (副本)`
+                        : defaultName || '我的新卡片项目'
+                    );
+                  }}
                   className={`flex-1 py-2 px-3 rounded-lg font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                     saveMode === 'new'
                       ? 'bg-white text-zinc-900 font-bold shadow-xs'
@@ -124,22 +134,36 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
             )}
 
             {saveMode === 'update' && isExistingUserProject ? (
-              <div className="p-4 bg-emerald-50/80 border border-emerald-200 rounded-xl space-y-1.5">
-                <p className="text-xs font-semibold text-emerald-950 flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-emerald-600" />
-                  <span>覆盖更新当前项目</span>
-                </p>
-                <p className="text-xs text-emerald-800 font-medium">
-                  项目名：<span className="font-bold underline">{activeProjectName}</span>
-                </p>
-                <p className="text-[11px] text-emerald-700/80 leading-relaxed pt-1">
-                  将当前画布上的所有正文、配图与排版样式更新保存到此项目中，随时在项目库中打开。
-                </p>
+              <div className="space-y-3">
+                <div className="p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-xl space-y-1">
+                  <p className="text-xs font-semibold text-emerald-950 flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-600" />
+                    <span>覆盖更新已有项目</span>
+                  </p>
+                  <p className="text-[11px] text-emerald-700/90 leading-relaxed">
+                    将当前画布上的最新排版与文本内容更新保存至该项目。
+                  </p>
+                </div>
+
+                <div>
+                  <label htmlFor="save-project-name" className="block text-xs font-semibold text-zinc-700 mb-1.5">
+                    项目名称
+                  </label>
+                  <input
+                    id="save-project-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="请输入项目名称..."
+                    maxLength={50}
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-xs text-zinc-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
+                  />
+                </div>
               </div>
             ) : (
               <div>
                 <label htmlFor="save-project-name" className="block text-xs font-semibold text-zinc-700 mb-1.5">
-                  项目名称
+                  新项目名称
                 </label>
                 <input
                   id="save-project-name"
@@ -151,6 +175,12 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
                   maxLength={50}
                   className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-300 rounded-xl text-xs text-zinc-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
                 />
+                {isExistingUserProject && activeProjectName && (
+                  <p className="text-[11px] text-amber-800/80 mt-1.5 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                    <span>原项目「{activeProjectName}」将原封不动保留，本次改动将保存为独立的新项目。</span>
+                  </p>
+                )}
               </div>
             )}
 

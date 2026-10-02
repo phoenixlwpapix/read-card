@@ -74,9 +74,13 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
             {config.aspectRatio || '3:4'} · {dimensions.width} × {dimensions.height} px
           </span>
           {activeProjectName && (
-            <span className="text-[11px] text-zinc-600 flex items-center gap-1.5 font-medium truncate max-w-[260px] border-l border-zinc-200 pl-3">
+            <span
+              className="text-[11px] text-zinc-600 flex items-center gap-1.5 font-medium truncate max-w-[280px] border-l border-zinc-200 pl-3"
+              title={`当前正在编辑的项目: ${activeProjectName}`}
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              <span className="truncate">{activeProjectName}</span>
+              <span className="text-zinc-400 font-normal">当前项目:</span>
+              <span className="truncate font-semibold text-zinc-800">{activeProjectName}</span>
             </span>
           )}
         </div>
