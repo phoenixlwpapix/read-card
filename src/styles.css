@@ -1,0 +1,169 @@
+@import "tailwindcss";
+@import "@fontsource/literata/400.css";
+@import "@fontsource/literata/600.css";
+@import "@fontsource/source-serif-4/400.css";
+@import "@fontsource/source-serif-4/600.css";
+@import "@fontsource/lora/400.css";
+@import "@fontsource/lora/600.css";
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+
+@theme {
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-literata: 'Literata', Georgia, serif;
+  --font-sourceserif: 'Source Serif 4', Georgia, serif;
+  --font-lora: 'Lora', Georgia, serif;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+/* Card Specific Themes (3:4 ratio - 900x1200) */
+.reading-card {
+  width: 900px;
+  height: 1200px;
+  box-sizing: border-box;
+  padding: 42px 46px 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Paper Theme */
+.card-theme-paper {
+  background-color: #faf6ec;
+  color: #372f26;
+}
+.card-theme-paper .card-border-line {
+  border-color: #d8cbaf;
+}
+.card-theme-paper .card-badge-bg {
+  background-color: #f8d447;
+  color: #1a1710;
+}
+.card-theme-paper .card-eyebrow-text {
+  color: #9a8c71;
+}
+.card-theme-paper .card-subtext {
+  color: #7d6f55;
+}
+
+/* Minimal Theme */
+.card-theme-minimal {
+  background-color: #ffffff;
+  color: #18181b;
+}
+.card-theme-minimal .card-border-line {
+  border-color: #e4e4e7;
+}
+.card-theme-minimal .card-badge-bg {
+  background-color: #18181b;
+  color: #ffffff;
+}
+.card-theme-minimal .card-eyebrow-text {
+  color: #71717a;
+}
+.card-theme-minimal .card-subtext {
+  color: #52525b;
+}
+
+/* Dark Theme */
+.card-theme-dark {
+  background-color: #16181d;
+  color: #f1f5f9;
+}
+.card-theme-dark .card-border-line {
+  border-color: #2b303b;
+}
+.card-theme-dark .card-badge-bg {
+  background-color: #f59e0b;
+  color: #111827;
+}
+.card-theme-dark .card-eyebrow-text {
+  color: #94a3b8;
+}
+.card-theme-dark .card-subtext {
+  color: #cbd5e1;
+}
+
+/* Matcha Theme */
+.card-theme-matcha {
+  background-color: #f3f6f1;
+  color: #202e21;
+}
+.card-theme-matcha .card-border-line {
+  border-color: #ccd7c7;
+}
+.card-theme-matcha .card-badge-bg {
+  background-color: #3b5c3d;
+  color: #f8faf8;
+}
+.card-theme-matcha .card-eyebrow-text {
+  color: #738874;
+}
+.card-theme-matcha .card-subtext {
+  color: #4b614d;
+}
+
+/* Warm Theme */
+.card-theme-warm {
+  background-color: #fbf6f0;
+  color: #342621;
+}
+.card-theme-warm .card-border-line {
+  border-color: #ebdcd0;
+}
+.card-theme-warm .card-badge-bg {
+  background-color: #ea580c;
+  color: #ffffff;
+}
+.card-theme-warm .card-eyebrow-text {
+  color: #a3857a;
+}
+.card-theme-warm .card-subtext {
+  color: #6c544c;
+}
+
+/* Article Illustration Float and Layout */
+.card-illustration-float {
+  float: right;
+  width: 270px;
+  height: 270px;
+  margin: 0 0 20px 28px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.card-illustration-banner {
+  width: 100%;
+  height: 240px;
+  margin: 0 0 24px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
