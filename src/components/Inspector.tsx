@@ -73,29 +73,15 @@ export const Inspector: React.FC<InspectorProps> = ({
     {
       id: 'literata',
       name: 'Literata',
-      tag: '首选推荐',
-      desc: '电子书级 · 高 x-height',
-      fontClass: 'font-serif',
-    },
-    {
-      id: 'source-serif',
-      name: 'Source Serif 4',
-      tag: 'Adobe 杰作',
-      desc: '锐利精干 · 边缘绝不糊',
-      fontClass: 'font-serif',
-    },
-    {
-      id: 'lora',
-      name: 'Lora',
-      tag: '文艺典雅',
-      desc: '温润曲线 · 呼吸感强',
+      tag: '经典衬线',
+      desc: '电子书级 · 典雅衬线体',
       fontClass: 'font-serif',
     },
     {
       id: 'manrope',
       name: 'Manrope',
       tag: '现代几何',
-      desc: '清晰理智 · 现代无衬线',
+      desc: '清晰理智 · 现代无衬线体',
       fontClass: 'font-sans',
     },
   ];
@@ -585,19 +571,31 @@ export const Inspector: React.FC<InspectorProps> = ({
               {/* Bold & Spacing controls */}
               <div className="space-y-2.5 pt-2 border-t border-zinc-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-zinc-600 font-medium">全局字重加黑</span>
-                  <button
-                    type="button"
-                    onClick={() => onChange({ isBold: !config.isBold })}
-                    className={`py-1 px-2.5 rounded-md border text-[11px] font-medium flex items-center gap-1 transition-colors ${
-                      config.isBold
-                        ? 'bg-amber-50 border-amber-300 text-amber-900 font-bold shadow-xs'
-                        : 'bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50'
-                    }`}
-                  >
-                    <Bold className={`w-3.5 h-3.5 ${config.isBold ? 'text-amber-700' : 'text-zinc-400'}`} />
-                    {config.isBold ? '字重 600' : '常规 400'}
-                  </button>
+                  <span className="text-[11px] text-zinc-600 font-medium">字重选择</span>
+                  <div className="flex items-center bg-zinc-100 p-0.5 rounded-lg border border-zinc-200">
+                    {([500, 600] as const).map((w) => {
+                      const activeWeight = config.fontWeight ?? (config.isBold ? 600 : 500);
+                      const isSelected = activeWeight === w;
+                      return (
+                        <button
+                          key={w}
+                          type="button"
+                          onClick={() => onChange({ fontWeight: w, isBold: w === 600 })}
+                          className={`px-3 py-1 text-xs rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+                            isSelected
+                              ? 'bg-white text-zinc-900 font-bold shadow-xs border border-zinc-200/80'
+                              : 'text-zinc-500 hover:text-zinc-800 font-medium'
+                          }`}
+                        >
+                          <Bold className={`w-3 h-3 ${isSelected ? 'text-amber-700' : 'text-zinc-400'}`} />
+                          <span>{w}</span>
+                          <span className="text-[10px] text-zinc-400 font-normal">
+                            {w === 500 ? '(中黑)' : '(加粗)'}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">

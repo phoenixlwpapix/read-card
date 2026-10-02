@@ -72,13 +72,14 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
     };
 
     // Font style with typographic optimization for dense reading cards
+    const activeWeight = config.fontWeight ?? (config.isBold ? 600 : 500);
     const fontStyle = {
       fontFamily: getFontStack(config.fontFamily),
       fontSize: `${config.fontSize}px`,
       lineHeight: config.lineHeight,
       letterSpacing: config.fontFamily === 'manrope' ? '0.015em' : '0.028em',
       fontOpticalSizing: 'auto' as const,
-      fontWeight: config.isBold ? 600 : 400,
+      fontWeight: activeWeight,
     };
 
     // Calculate heading size based on length (enlarged for prominent masthead)
@@ -261,10 +262,8 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
             paragraphs.map((text, idx) => (
               <p
                 key={idx}
-                className={`mb-5 last:mb-0 text-justify break-words ${
-                  config.isBold ? 'font-semibold' : 'font-normal'
-                }`}
-                style={{ textJustify: 'inter-word' }}
+                className="mb-5 last:mb-0 text-justify break-words"
+                style={{ textJustify: 'inter-word', fontWeight: activeWeight }}
               >
                 {renderMarkdownInline(text)}
               </p>

@@ -63,7 +63,8 @@ export function usePagination(config: CardConfig) {
       };
       measure.style.fontFamily = getFontStack(config.fontFamily);
       measure.style.letterSpacing = config.fontFamily === 'manrope' ? '0.015em' : '0.028em';
-      measure.style.fontWeight = config.isBold ? '600' : '400';
+      const activeWeight = config.fontWeight ?? (config.isBold ? 600 : 500);
+      measure.style.fontWeight = String(activeWeight);
       measure.style.wordBreak = 'break-word';
 
       document.body.appendChild(measure);
@@ -158,6 +159,7 @@ export function usePagination(config: CardConfig) {
     config.imageUrl,
     config.imagePosition,
     config.isBold,
+    config.fontWeight,
     config.articleTitle,
     config.bannerHeight,
     config.aspectRatio,
