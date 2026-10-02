@@ -93,7 +93,7 @@ When you remove the noise, the melody of your life finally becomes audible. Ever
 ];
 
 export const INITIAL_CONFIG: CardConfig = {
-  cardHeading: '奇幻画布 · 英语精读',
+  cardHeading: '请输入您的专栏标题',
   volume: 'VOL. 01',
   tagline: 'READFLOW / DAILY READING',
   showAvatar: true,

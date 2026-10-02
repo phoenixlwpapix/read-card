@@ -23,7 +23,13 @@ export default function App() {
   const [config, setConfig] = useState<CardConfig>(() => {
     try {
       const saved = localStorage.getItem(CONFIG_KEY) || localStorage.getItem(LEGACY_CONFIG_KEY);
-      if (saved) return { ...INITIAL_CONFIG, ...JSON.parse(saved) };
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.cardHeading === '奇幻画布 · 英语精读') {
+          parsed.cardHeading = '请输入您的专栏标题';
+        }
+        return { ...INITIAL_CONFIG, ...parsed };
+      }
     } catch {
       // fallback to initial
     }
@@ -116,6 +122,9 @@ export default function App() {
         // 3. Current Workspace Config
         const idbConfig = await idbGet<CardConfig>(CONFIG_KEY);
         if (idbConfig && isMounted) {
+          if (idbConfig.cardHeading === '奇幻画布 · 英语精读') {
+            idbConfig.cardHeading = '请输入您的专栏标题';
+          }
           setConfig((prev) => ({ ...prev, ...idbConfig }));
         } else {
           const legacyConf = localStorage.getItem(LEGACY_CONFIG_KEY);
@@ -123,6 +132,9 @@ export default function App() {
             try {
               const parsed = JSON.parse(legacyConf);
               if (parsed && typeof parsed === 'object') {
+                if (parsed.cardHeading === '奇幻画布 · 英语精读') {
+                  parsed.cardHeading = '请输入您的专栏标题';
+                }
                 if (isMounted) setConfig((prev) => ({ ...prev, ...parsed }));
                 await idbSet(CONFIG_KEY, parsed);
               }

@@ -171,7 +171,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 type="text"
                 value={config.cardHeading}
                 onChange={(e) => onChange({ cardHeading: e.target.value })}
-                placeholder="例如：奇幻画布 · 英语精读"
+                placeholder="请输入您的专栏标题"
                 maxLength={40}
                 className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors font-medium"
               />
