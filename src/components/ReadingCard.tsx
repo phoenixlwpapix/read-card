@@ -16,24 +16,54 @@ function renderMarkdownInline(text: string) {
   const parts = text.split(regex);
   return parts.map((part, pIdx) => {
     if (part.startsWith('***') && part.endsWith('***') && part.length > 6) {
+      const content = part.slice(3, -3);
+      const leadingSpace = content.match(/^\s*/)?.[0] || '';
+      const trailingSpace = content.match(/\s*$/)?.[0] || '';
+      const trimmed = content.trim();
       return (
-        <strong key={pIdx} className="font-bold italic card-highlight">
-          {part.slice(3, -3)}
-        </strong>
+        <span key={pIdx}>
+          {leadingSpace}
+          {trimmed && (
+            <strong className="font-bold italic card-highlight">
+              {trimmed}
+            </strong>
+          )}
+          {trailingSpace}
+        </span>
       );
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      const content = part.slice(2, -2);
+      const leadingSpace = content.match(/^\s*/)?.[0] || '';
+      const trailingSpace = content.match(/\s*$/)?.[0] || '';
+      const trimmed = content.trim();
       return (
-        <strong key={pIdx} className="font-bold card-highlight">
-          {part.slice(2, -2)}
-        </strong>
+        <span key={pIdx}>
+          {leadingSpace}
+          {trimmed && (
+            <strong className="font-bold card-highlight">
+              {trimmed}
+            </strong>
+          )}
+          {trailingSpace}
+        </span>
       );
     }
     if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+      const content = part.slice(1, -1);
+      const leadingSpace = content.match(/^\s*/)?.[0] || '';
+      const trailingSpace = content.match(/\s*$/)?.[0] || '';
+      const trimmed = content.trim();
       return (
-        <em key={pIdx} className="italic">
-          {part.slice(1, -1)}
-        </em>
+        <span key={pIdx}>
+          {leadingSpace}
+          {trimmed && (
+            <em className="italic">
+              {trimmed}
+            </em>
+          )}
+          {trailingSpace}
+        </span>
       );
     }
     return part;

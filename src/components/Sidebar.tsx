@@ -48,14 +48,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const end = el.selectionEnd;
     const text = config.articleContent;
     if (start !== end) {
-      const selected = text.slice(start, end);
-      const replacement = `**${selected}**`;
-      const updated = text.slice(0, start) + replacement + text.slice(end);
-      onChange({ articleContent: updated });
-      setTimeout(() => {
-        el.focus();
-        el.setSelectionRange(start + 2, end + 2);
-      }, 0);
+      let selStart = start;
+      let selEnd = end;
+
+      // Automatically trim trailing and leading spaces (browser double-click selects trailing space by default)
+      while (selEnd > selStart && /\s/.test(text[selEnd - 1])) {
+        selEnd--;
+      }
+      while (selStart < selEnd && /\s/.test(text[selStart])) {
+        selStart++;
+      }
+
+      if (selStart !== selEnd) {
+        const selected = text.slice(selStart, selEnd);
+        const replacement = `**${selected}**`;
+        const updated = text.slice(0, selStart) + replacement + text.slice(selEnd);
+        onChange({ articleContent: updated });
+        setTimeout(() => {
+          el.focus();
+          el.setSelectionRange(selStart + 2, selStart + 2 + selected.length);
+        }, 0);
+      }
     } else {
       const replacement = `**重点词句**`;
       const updated = text.slice(0, start) + replacement + text.slice(start);
@@ -75,14 +88,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const end = el.selectionEnd;
     const text = config.articleContent;
     if (start !== end) {
-      const selected = text.slice(start, end);
-      const replacement = `*${selected}*`;
-      const updated = text.slice(0, start) + replacement + text.slice(end);
-      onChange({ articleContent: updated });
-      setTimeout(() => {
-        el.focus();
-        el.setSelectionRange(start + 1, end + 1);
-      }, 0);
+      let selStart = start;
+      let selEnd = end;
+
+      // Automatically trim trailing and leading spaces
+      while (selEnd > selStart && /\s/.test(text[selEnd - 1])) {
+        selEnd--;
+      }
+      while (selStart < selEnd && /\s/.test(text[selStart])) {
+        selStart++;
+      }
+
+      if (selStart !== selEnd) {
+        const selected = text.slice(selStart, selEnd);
+        const replacement = `*${selected}*`;
+        const updated = text.slice(0, selStart) + replacement + text.slice(selEnd);
+        onChange({ articleContent: updated });
+        setTimeout(() => {
+          el.focus();
+          el.setSelectionRange(selStart + 1, selStart + 1 + selected.length);
+        }, 0);
+      }
     } else {
       const replacement = `*斜体文字*`;
       const updated = text.slice(0, start) + replacement + text.slice(start);
@@ -130,6 +156,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (start !== end) {
       let selStart = start;
       let selEnd = end;
+
+      // Automatically trim trailing/leading spaces before checking markers
+      while (selEnd > selStart && /\s/.test(text[selEnd - 1])) {
+        selEnd--;
+      }
+      while (selStart < selEnd && /\s/.test(text[selStart])) {
+        selStart++;
+      }
+
       let selected = text.slice(selStart, selEnd);
 
       // Check if formatting markers are wrapped immediately around the selection
