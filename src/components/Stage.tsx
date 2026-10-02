@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { ChevronLeft, ChevronRight, FolderKanban } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FolderKanban, FilePlus2 } from 'lucide-react';
 import { getCardDimensions, type CardConfig } from '../types';
 import { ReadingCard } from './ReadingCard';
 
@@ -9,6 +9,7 @@ interface StageProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   onSaveProject: () => void;
+  onNewProject?: () => void;
   activeProjectName?: string | null;
 }
 
@@ -23,6 +24,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
     currentPage,
     onPageChange,
     onSaveProject,
+    onNewProject,
     activeProjectName,
   },
   ref
@@ -85,15 +87,29 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
           )}
         </div>
 
-        {/* Top Right: Only the Save Project Button */}
-        <button
-          type="button"
-          onClick={onSaveProject}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#252a26] hover:bg-[#343b35] text-white rounded-lg text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
-        >
-          <FolderKanban className="w-3.5 h-3.5 text-[#f4ce45]" />
-          <span>保存项目</span>
-        </button>
+        {/* Top Right: New Project & Save Project Buttons */}
+        <div className="flex items-center gap-2">
+          {onNewProject && (
+            <button
+              type="button"
+              onClick={onNewProject}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-zinc-50 border border-zinc-200/90 text-zinc-700 hover:text-zinc-900 rounded-lg text-xs font-semibold transition-colors shadow-2xs cursor-pointer hover:border-zinc-300"
+              title="新建空白卡片（保留专栏、头像与排版风格）"
+            >
+              <FilePlus2 className="w-3.5 h-3.5 text-zinc-500" />
+              <span>新建项目</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={onSaveProject}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#252a26] hover:bg-[#343b35] text-white rounded-lg text-xs font-semibold transition-colors shadow-2xs cursor-pointer"
+          >
+            <FolderKanban className="w-3.5 h-3.5 text-[#f4ce45]" />
+            <span>保存项目</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Canvas Area */}
