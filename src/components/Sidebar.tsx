@@ -464,25 +464,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="space-y-2 pt-0.5">
               <div>
                 <label htmlFor="card-footer-input" className="block text-[11px] font-medium text-zinc-600 mb-1">
-                  底部寄语 / 标语文案
+                  底部互动标语 / 连麦文案
                 </label>
                 <input
                   id="card-footer-input"
                   type="text"
                   value={config.footerText ?? ''}
                   onChange={(e) => onChange({ footerText: e.target.value })}
-                  placeholder="如：ONE ARTICLE. A NEW PERSPECTIVE."
+                  placeholder="如：欢迎连麦交流 · 申请上麦一起读"
                   maxLength={60}
                   className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-900 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors font-medium"
                 />
               </div>
-              <div className="flex items-center justify-between text-[10px] text-zinc-400">
-                <span>右侧自动呈现双位数页码（如 01 / 02）</span>
+
+              {/* Quick Live Stream Presets */}
+              <div className="space-y-1">
+                <span className="text-[10px] text-zinc-400">直播间常用预设：</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    '欢迎连麦交流 · 申请上麦一起读',
+                    '连麦精读中 · 点击申请上麦',
+                    '欢迎上麦领读 · 沉浸式慢读',
+                  ].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => onChange({ footerText: preset })}
+                      className="text-[10px] px-2 py-0.5 rounded bg-zinc-100 hover:bg-amber-100 hover:text-amber-900 text-zinc-600 transition-colors cursor-pointer border border-zinc-200/60"
+                    >
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-0.5">
+                <span>底端文字已居中加粗放大（24px），手机端直播格外醒目</span>
                 {config.footerText && (
                   <button
                     type="button"
                     onClick={() => onChange({ footerText: '' })}
-                    className="hover:text-zinc-600 cursor-pointer"
+                    className="hover:text-zinc-600 cursor-pointer ml-2 shrink-0"
                   >
                     清空文案
                   </button>

@@ -279,16 +279,23 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
           )}
         </main>
 
-        {/* Card Footer (Optional - Default ON) */}
+        {/* Card Footer (Optional - Default ON, Centered & Enlarged for Live Stream Engagement) */}
         {(config.showFooter ?? true) && (
-          <footer className="shrink-0 pt-3.5 mt-2 border-t card-border-line flex items-center justify-between text-xs tracking-widest font-semibold uppercase card-eyebrow-text relative z-1">
-            <span className="truncate max-w-[550px]">
-              {config.footerText || 'ONE ARTICLE. A NEW PERSPECTIVE.'}
+          <footer className="shrink-0 pt-4 pb-1 mt-3 border-t card-border-line relative z-1 flex items-center justify-center">
+            <span
+              className="text-center font-bold tracking-wide card-eyebrow-text max-w-[760px] truncate leading-tight select-text"
+              style={{ fontSize: '24px' }}
+            >
+              {config.footerText || '欢迎连麦交流 · 申请上麦一起读'}
             </span>
-            <span className="font-mono tracking-widest font-bold shrink-0">
-              {String(pageIndex + 1).padStart(2, '0')} /{' '}
-              {String(Math.max(1, totalPages || 1)).padStart(2, '0')}
-            </span>
+
+            {/* Subtle Page Counter on the right corner if multi-page */}
+            {totalPages > 1 && (
+              <span className="absolute right-0 bottom-1 font-mono text-xs tracking-wider opacity-60 font-semibold card-eyebrow-text">
+                {String(pageIndex + 1).padStart(2, '0')} /{' '}
+                {String(Math.max(1, totalPages)).padStart(2, '0')}
+              </span>
+            )}
           </footer>
         )}
       </div>

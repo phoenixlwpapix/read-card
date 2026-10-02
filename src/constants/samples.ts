@@ -131,7 +131,7 @@ When we read slowly, we listen not just to what the author is saying, but to the
   textureIntensity: 'medium',
   aspectRatio: '3:4',
   showFooter: true,
-  footerText: 'ONE ARTICLE. A NEW PERSPECTIVE.',
+  footerText: '欢迎连麦交流 · 申请上麦一起读',
 };
 
 export const BUILTIN_PROJECTS: CardProject[] = SAMPLE_ARTICLES.map((sample, idx) => ({
