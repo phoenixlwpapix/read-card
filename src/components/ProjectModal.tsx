@@ -56,7 +56,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     setFilterTab('user');
   };
 
-  const allProjects: CardProject[] = [...BUILTIN_PROJECTS, ...userProjects];
+  // 用户创建的项目优先排在最前（按最近更新时间排序），随后展示官方内置范例
+  const sortedUserProjects = [...userProjects].sort(
+    (a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)
+  );
+  const allProjects: CardProject[] = [...sortedUserProjects, ...BUILTIN_PROJECTS];
 
   const filteredProjects = allProjects.filter((p) => {
     if (filterTab === 'builtin' && !p.isBuiltIn) return false;
