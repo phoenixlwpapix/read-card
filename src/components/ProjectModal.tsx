@@ -65,27 +65,96 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     const query = searchQuery.toLowerCase();
     return (
       p.name.toLowerCase().includes(query) ||
-      p.config.cardHeading.toLowerCase().includes(query) ||
-      p.config.articleTitle.toLowerCase().includes(query)
+      p.config.cardHeading?.toLowerCase().includes(query) ||
+      p.config.articleTitle?.toLowerCase().includes(query) ||
+      p.config.articleContent?.toLowerCase().includes(query)
     );
   });
 
-  const getThemeColor = (theme: string) => {
-    switch (theme) {
-      case 'paper':
-        return { bg: 'bg-[#faf6ec]', border: 'border-[#e6deca]', text: 'text-[#8c734b]' };
-      case 'minimal':
-        return { bg: 'bg-[#ffffff]', border: 'border-zinc-200', text: 'text-zinc-700' };
-      case 'dark':
-        return { bg: 'bg-[#181a20]', border: 'border-zinc-700', text: 'text-amber-400' };
-      case 'matcha':
-        return { bg: 'bg-[#f3f6f1]', border: 'border-[#cfdacd]', text: 'text-[#416844]' };
-      case 'warm':
-        return { bg: 'bg-[#fbf6f0]', border: 'border-[#e7d8c7]', text: 'text-[#c2410c]' };
-      default:
-        return { bg: 'bg-zinc-50', border: 'border-zinc-200', text: 'text-zinc-600' };
-    }
-  };
+function cleanMarkdownSnippet(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/___([^_]+)___/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/(^|[^\w])_([^_]+)_(?=[^\w]|$)/g, '$1$2')
+    .replace(/~~([^~]+)~~/g, '$1')
+    .replace(/==([^=]+)==/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^[#>-]+\s*/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+interface ThemeCardStyle {
+  label: string;
+  cardBg: string;
+  cardBorder: string;
+  titleColor: string;
+  subtextColor: string;
+  metaColor: string;
+  badgeBg: string;
+  dividerColor: string;
+}
+
+const THEME_STYLES: Record<string, ThemeCardStyle> = {
+  paper: {
+    label: '温润纸质',
+    cardBg: 'bg-[#faf6ec]',
+    cardBorder: 'border-[#e8dfce]',
+    titleColor: 'text-[#2a241e]',
+    subtextColor: 'text-[#635545]',
+    metaColor: 'text-[#8e7e6a]',
+    badgeBg: 'bg-[#eee5d3] text-[#6d5b3e]',
+    dividerColor: 'border-[#ede3d0]',
+  },
+  minimal: {
+    label: '冷白极简',
+    cardBg: 'bg-white',
+    cardBorder: 'border-zinc-200/90',
+    titleColor: 'text-zinc-900',
+    subtextColor: 'text-zinc-600',
+    metaColor: 'text-zinc-400',
+    badgeBg: 'bg-zinc-100 text-zinc-600',
+    dividerColor: 'border-zinc-100',
+  },
+  dark: {
+    label: '曜黑暗夜',
+    cardBg: 'bg-[#181a20]',
+    cardBorder: 'border-zinc-700/80',
+    titleColor: 'text-zinc-100',
+    subtextColor: 'text-zinc-400',
+    metaColor: 'text-zinc-500',
+    badgeBg: 'bg-zinc-800 text-amber-400',
+    dividerColor: 'border-zinc-800',
+  },
+  matcha: {
+    label: '清爽抹茶',
+    cardBg: 'bg-[#f3f6f1]',
+    cardBorder: 'border-[#d0dfcd]',
+    titleColor: 'text-[#1c291d]',
+    subtextColor: 'text-[#485c49]',
+    metaColor: 'text-[#6c856e]',
+    badgeBg: 'bg-[#e2ebe0] text-[#3d5a3f]',
+    dividerColor: 'border-[#e0ebe0]',
+  },
+  warm: {
+    label: '暖杏微光',
+    cardBg: 'bg-[#fcf7f1]',
+    cardBorder: 'border-[#ecdcc8]',
+    titleColor: 'text-[#2e2118]',
+    subtextColor: 'text-[#6b5546]',
+    metaColor: 'text-[#967963]',
+    badgeBg: 'bg-[#faebd9] text-[#9a4d1a]',
+    dividerColor: 'border-[#eee0ce]',
+  },
+};
+
+const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
+  return THEME_STYLES[theme || 'paper'] || THEME_STYLES.paper;
+};
 
   return (
     <div
@@ -244,100 +313,134 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           {filteredProjects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredProjects.map((project) => {
-                const colors = getThemeColor(project.config.theme);
+                const theme = getThemeCardStyle(project.config.theme);
                 const wordCount = project.config.articleContent.trim()
                   ? project.config.articleContent.trim().split(/\s+/).length
                   : 0;
+                const hasArticleTitle = Boolean(project.config.articleTitle?.trim());
+                const primaryTitle = hasArticleTitle
+                  ? project.config.articleTitle.trim()
+                  : project.name || '无标题卡片';
+                const columnName = project.config.cardHeading?.trim();
+                const volume = project.config.volume?.trim();
+                const cleanSnippet = cleanMarkdownSnippet(project.config.articleContent).slice(0, 105);
 
                 return (
                   <div
                     key={project.id}
-                    className="bg-white border border-zinc-200/90 rounded-xl overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group hover:border-amber-400/70"
+                    className={`rounded-2xl border ${theme.cardBorder} ${theme.cardBg} p-4 sm:p-4.5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group hover:-translate-y-0.5 relative overflow-hidden`}
                   >
-                    {/* Visual Card Banner Preview */}
+                    {/* Top Eyebrow row: Column & Volume + Theme Pill */}
                     <div
-                      className={`h-24 p-3.5 border-b flex flex-col justify-between relative ${colors.bg} ${colors.border}`}
+                      className={`flex items-center justify-between gap-2 shrink-0 pb-3 border-b ${theme.dividerColor}`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 min-w-0">
                         <span
-                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full shrink-0 ${
                             project.isBuiltIn
-                              ? 'bg-amber-100/90 text-amber-900 border border-amber-300/40'
-                              : 'bg-emerald-100 text-emerald-900 border border-emerald-300/40'
+                              ? 'bg-amber-500/15 text-amber-800 border border-amber-500/30'
+                              : 'bg-emerald-500/15 text-emerald-800 border border-emerald-500/30'
                           }`}
                         >
-                          {project.isBuiltIn ? '官方内置范例' : '我的卡片项目'}
+                          {project.isBuiltIn ? '官方范例' : '我的工程'}
                         </span>
 
-                        <span className="text-[10px] font-mono text-zinc-400 font-medium">
-                          {project.config.aspectRatio || '3:4'} 卡片
-                        </span>
+                        {columnName && (
+                          <span
+                            className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 truncate"
+                            title={`专栏: ${columnName}${volume ? ` · ${volume}` : ''}`}
+                          >
+                            {columnName}
+                            {volume ? ` · ${volume}` : ''}
+                          </span>
+                        )}
                       </div>
 
-                      <div>
-                        <p className={`text-xs font-bold truncate ${colors.text}`}>
-                          {project.config.cardHeading}
-                        </p>
-                        <p className="text-[10px] text-zinc-500 truncate mt-0.5">
-                          {project.config.articleTitle || '（无文章标题）'}
-                        </p>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${theme.badgeBg}`}>
+                          {theme.label}
+                        </span>
+                        <span className="text-[10px] font-mono text-zinc-400">
+                          {project.config.aspectRatio || '3:4'}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Card Content Info */}
-                    <div className="p-3.5 space-y-2.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-xs font-bold text-zinc-900 line-clamp-1 group-hover:text-amber-800 transition-colors">
-                          {project.name}
-                        </h3>
-                        <p className="text-[11px] text-zinc-500 line-clamp-2 mt-1 leading-relaxed font-serif">
-                          {project.config.articleContent.slice(0, 100)}...
-                        </p>
-                      </div>
+                    {/* Main Content Area: Hero Article Title + Clean Excerpt */}
+                    <div className="py-3.5 flex-1 flex flex-col justify-start">
+                      {/* Article Title: Prominent, bold, high contrast */}
+                      <h3
+                        className={`text-[15px] sm:text-base font-bold tracking-tight leading-snug line-clamp-2 ${theme.titleColor} group-hover:text-amber-700 transition-colors`}
+                        title={primaryTitle}
+                      >
+                        {primaryTitle}
+                      </h3>
 
-                      {/* Metadata tags */}
-                      <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-[10px] text-zinc-400">
-                        <span className="flex items-center gap-1">
-                          <Layers className="w-3 h-3" />
-                          {wordCount} 词 · {project.config.fontFamily}
+                      {/* Clean Article Excerpt */}
+                      {cleanSnippet ? (
+                        <p
+                          className={`text-xs ${theme.subtextColor} leading-relaxed font-serif line-clamp-2 mt-2 opacity-90`}
+                        >
+                          “{cleanSnippet}...”
+                        </p>
+                      ) : (
+                        <p className="text-xs text-zinc-400 italic mt-2">（正文暂无内容）</p>
+                      )}
+
+                      {/* Project Name (shown only if it differs from the article title, to avoid repetition) */}
+                      {hasArticleTitle && project.name && project.name !== primaryTitle && (
+                        <div className={`mt-3 flex items-center gap-1.5 text-[10.5px] ${theme.metaColor} truncate`}>
+                          <FolderKanban className="w-3 h-3 shrink-0 opacity-70" />
+                          <span className="truncate">工程名: {project.name}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer Info & Actions */}
+                    <div className={`pt-3 border-t ${theme.dividerColor} space-y-2.5 shrink-0`}>
+                      {/* Stats */}
+                      <div className={`flex items-center justify-between text-[10.5px] ${theme.metaColor}`}>
+                        <span className="flex items-center gap-1 font-medium">
+                          <Layers className="w-3 h-3 opacity-70" />
+                          {wordCount} 词 · {project.config.fontFamily || 'literata'}
                         </span>
                         <span className="flex items-center gap-1 font-mono">
-                          <Calendar className="w-3 h-3" />
+                          <Calendar className="w-3 h-3 opacity-70" />
                           {project.isBuiltIn
                             ? '精选'
                             : new Date(project.updatedAt).toLocaleDateString()}
                         </span>
                       </div>
-                    </div>
 
-                    {/* Card Footer Actions */}
-                    <div className="px-3.5 py-2.5 bg-zinc-50/70 border-t border-zinc-100 flex items-center justify-between gap-2">
-                      {!project.isBuiltIn && (
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2 pt-0.5">
+                        {!project.isBuiltIn && (
+                          <button
+                            type="button"
+                            onClick={() => onRequestDeleteProject(project)}
+                            className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                            title="删除此项目"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+
                         <button
                           type="button"
-                          onClick={() => onRequestDeleteProject(project)}
-                          className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                          title="删除此项目"
+                          onClick={() => {
+                            onLoadProject(project);
+                            onClose();
+                          }}
+                          className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs ${
+                            project.isBuiltIn
+                              ? 'bg-[#252a26] hover:bg-[#343b35] text-white'
+                              : 'bg-amber-600 hover:bg-amber-700 text-white'
+                          }`}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>载入卡片</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-[#f4ce45]" />
                         </button>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onLoadProject(project);
-                          onClose();
-                        }}
-                        className={`py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all ${
-                          project.isBuiltIn
-                            ? 'w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800'
-                            : 'flex-1 bg-amber-600/10 hover:bg-amber-600 text-amber-900 hover:text-white'
-                        }`}
-                      >
-                        <span>载入项目</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      </div>
                     </div>
                   </div>
                 );
