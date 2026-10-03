@@ -15,11 +15,11 @@ export const SAMPLE_ARTICLES: { name: string; config: Partial<CardConfig> }[] = 
       avatarSize: 56,
       articleTitle: 'Start Your Day with Calm',
       author: 'Daily Notes',
-      articleContent: `Every morning gives us a **fresh start**. Before looking at your phone, take a deep breath and enjoy a quiet moment.
+      articleContent: `Every morning gives us a **fresh start** and a new chance to shape our day. Before reaching for your phone or rushing into work, take a deep breath. Give yourself a few quiet minutes to wake up gently, listen to the world around you, and feel grateful for a new day.
 
-Make a warm cup of coffee or tea. Read a few pages of a good book, or simply look out the window.
+Pour a warm cup of coffee or tea and sit comfortably by the window. Reading just a few pages of a good book can inspire clear thoughts and awaken your mind. When you make time for simple moments, the day ahead feels much lighter and more enjoyable.
 
-When you begin your morning with calm, you bring that **peace and focus** into the rest of your day.`,
+How you begin your morning often guides the rest of your day. When you start with calm and intention, you carry that **peace and confidence** into everything you do.`,
       showImage: false,
       theme: 'paper',
       fontFamily: 'literata',
@@ -47,11 +47,11 @@ When you begin your morning with calm, you bring that **peace and focus** into t
       avatarSize: 56,
       articleTitle: 'The Power of Small Steps',
       author: 'Growth Diary',
-      articleContent: `Big dreams are not built in a single day. They are created by the **small habits** you keep every day.
+      articleContent: `Big dreams are never built in a single afternoon. Instead, they are created by the **small habits** you choose to keep each day. It is easy to think that small actions do not matter, but real progress is always built quietly over time.
 
-Reading for ten minutes, writing down a new thought, or taking a short walk might feel simple. But day after day, they bring **real change**.
+Reading for ten minutes, writing down a new thought, or practicing a skill every day might feel modest right now. However, when you repeat these small efforts consistently, they slowly compound into **remarkable achievements** that surprise even yourself. Consistency always beats temporary enthusiasm.
 
-Do not worry about moving fast. Just focus on taking the next small step forward.`,
+Do not worry about how fast other people are moving. Keep your focus on your own path, celebrate every little victory, and take the next simple step forward with patience and trust.`,
       showImage: false,
       theme: 'matcha',
       fontFamily: 'literata',
@@ -79,11 +79,11 @@ Do not worry about moving fast. Just focus on taking the next small step forward
       avatarSize: 56,
       articleTitle: 'Enjoy the Simple Moments',
       author: 'Mindful Life',
-      articleContent: `Happiness is often found in the **simplest things** we tend to overlook.
+      articleContent: `True happiness is rarely found in having more things. More often, it lives in the **simple moments** we tend to overlook in our busy routines. When we slow down, we begin to realize that our everyday lives are already filled with quiet beauty.
 
-A warm cup of tea in the afternoon, a friendly chat with someone you care about, or a quiet walk under the trees.
+Notice the warmth of the sun on your face, the aroma of fresh coffee in the kitchen, or a sincere conversation with an old friend. These small experiences do not cost anything, yet they bring a deep sense of **comfort and gratitude** that busy days cannot buy.
 
-When you slow down and live in the **present moment**, everyday life becomes full of gentle joy.`,
+You do not need an extraordinary life to feel happy. Learn to pause, breathe deeply, and appreciate where you are right now. When you live in the present, every day holds something wonderful.`,
       showImage: false,
       theme: 'minimal',
       fontFamily: 'manrope',
@@ -111,11 +111,11 @@ export const INITIAL_CONFIG: CardConfig = {
   avatarSize: 56,
   articleTitle: 'Start Your Day with Calm',
   author: 'Daily Notes',
-  articleContent: `Every morning gives us a **fresh start**. Before looking at your phone, take a deep breath and enjoy a quiet moment.
+  articleContent: `Every morning gives us a **fresh start** and a new chance to shape our day. Before reaching for your phone or rushing into work, take a deep breath. Give yourself a few quiet minutes to wake up gently, listen to the world around you, and feel grateful for a new day.
 
-Make a warm cup of coffee or tea. Read a few pages of a good book, or simply look out the window.
+Pour a warm cup of coffee or tea and sit comfortably by the window. Reading just a few pages of a good book can inspire clear thoughts and awaken your mind. When you make time for simple moments, the day ahead feels much lighter and more enjoyable.
 
-When you begin your morning with calm, you bring that **peace and focus** into the rest of your day.`,
+How you begin your morning often guides the rest of your day. When you start with calm and intention, you carry that **peace and confidence** into everything you do.`,
   showImage: false,
   imageUrl: '',
   imagePosition: 'top-banner',
