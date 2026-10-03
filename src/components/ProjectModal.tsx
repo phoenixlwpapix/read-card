@@ -181,7 +181,7 @@ const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
                 </span>
               </div>
               <p className="text-xs text-zinc-500 hidden sm:block mt-0.5 truncate">
-                内置精选 3 套官方范例 · 支持保存并管理属于您的个性化卡片工程
+                内置精选 3 套官方范例 · 支持保存并管理属于您的个性化卡片项目
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@ const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
           >
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 shrink-0" />
-              <span className="text-xs font-bold text-amber-900 whitespace-nowrap">保存当前卡片工程</span>
+              <span className="text-xs font-bold text-amber-900 whitespace-nowrap">保存当前卡片项目</span>
             </div>
 
             <div className="flex-1 w-full sm:max-w-md flex items-center gap-2">
@@ -342,7 +342,7 @@ const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
                               : 'bg-emerald-500/15 text-emerald-800 border border-emerald-500/30'
                           }`}
                         >
-                          {project.isBuiltIn ? '官方范例' : '我的工程'}
+                          {project.isBuiltIn ? '官方范例' : '我的项目'}
                         </span>
 
                         {columnName && (
@@ -391,7 +391,7 @@ const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
                       {hasArticleTitle && project.name && project.name !== primaryTitle && (
                         <div className={`mt-3 flex items-center gap-1.5 text-[10.5px] ${theme.metaColor} truncate`}>
                           <FolderKanban className="w-3 h-3 shrink-0 opacity-70" />
-                          <span className="truncate">工程名: {project.name}</span>
+                          <span className="truncate">项目名: {project.name}</span>
                         </div>
                       )}
                     </div>
@@ -437,7 +437,7 @@ const getThemeCardStyle = (theme?: string): ThemeCardStyle => {
                               : 'bg-amber-600 hover:bg-amber-700 text-white'
                           }`}
                         >
-                          <span>载入卡片</span>
+                          <span>载入项目</span>
                           <ArrowRight className="w-3.5 h-3.5 text-[#f4ce45]" />
                         </button>
                       </div>
