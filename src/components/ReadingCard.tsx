@@ -166,29 +166,33 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
                 return (
                   <div className="shrink-0 flex items-center">
                     {config.avatarUrl ? (
-                      <img
-                        src={config.avatarUrl}
-                        alt="用户头像"
+                      <div
                         style={{
                           width: `${avatarDimension}px`,
                           height: `${avatarDimension}px`,
                         }}
-                        className={`object-cover border-[2.5px] shadow-sm ${
+                        className={`shrink-0 overflow-hidden flex items-center justify-center border-2 card-border-line ${
                           config.avatarShape === 'circle' ? 'rounded-full' : 'rounded-2xl'
                         }`}
-                      />
+                      >
+                        <img
+                          src={config.avatarUrl}
+                          alt="用户头像"
+                          className="w-full h-full object-cover block"
+                        />
+                      </div>
                     ) : (
                       <div
                         style={{
                           width: `${avatarDimension}px`,
                           height: `${avatarDimension}px`,
                         }}
-                        className={`flex items-center justify-center border-[2.5px] border-dashed shadow-sm ${
+                        className={`shrink-0 flex items-center justify-center border-2 border-dashed card-border-line ${
                           config.avatarShape === 'circle' ? 'rounded-full' : 'rounded-2xl'
                         } ${
                           config.theme === 'dark'
-                            ? 'bg-zinc-800 border-amber-500/40 text-amber-400'
-                            : 'bg-zinc-100/90 border-zinc-300 text-zinc-500'
+                            ? 'bg-zinc-800 text-amber-400'
+                            : 'bg-zinc-100/90 text-zinc-500'
                         }`}
                       >
                         <User
@@ -206,7 +210,7 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
 
               {/* Card Heading Badge / Highlight (Larger & more prominent) */}
               <div
-                className="card-badge-bg px-4.5 py-2 font-black tracking-tight rounded-md leading-tight uppercase shrink-0 shadow-2xs"
+                className="card-badge-bg px-4.5 py-2 font-black tracking-tight rounded-md leading-tight uppercase shrink-0"
                 style={{ fontSize: `${headingFontSize}px` }}
               >
                 {headingText}

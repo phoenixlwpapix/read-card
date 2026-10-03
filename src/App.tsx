@@ -486,6 +486,7 @@ export default function App() {
             style: {
               transform: 'none',
               margin: '0',
+              boxShadow: 'none',
             },
           });
 
@@ -559,6 +560,7 @@ export default function App() {
         style: {
           transform: 'none',
           margin: '0',
+          boxShadow: 'none',
         },
       });
 
