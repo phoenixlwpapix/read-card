@@ -10,7 +10,6 @@ import {
   RemoveFormatting,
   ClipboardPaste,
   FileText,
-  SlidersHorizontal,
   FolderKanban,
   X,
 } from 'lucide-react';
@@ -713,17 +712,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
               页脚已关闭，卡片正文底部可多容纳约 3~5 行文字。
             </p>
           )}
-        </div>
-
-        {/* Quick hint banner leading to the Right Inspector */}
-        <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-            <SlidersHorizontal className="w-3 h-3" />
-          </div>
-          <div>
-            <p className="text-[11px] font-semibold text-amber-900">配图、色彩与字体设置</p>
-            <p className="text-[10px] text-amber-700">在右侧视觉属性栏中实时调节与预览</p>
-          </div>
         </div>
       </div>
 
