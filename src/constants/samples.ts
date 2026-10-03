@@ -8,13 +8,13 @@ export const SAMPLE_ARTICLES: { name: string; config: Partial<CardConfig> }[] = 
     config: {
       cardHeading: '晨读时刻 · MORNING READ',
       volume: 'VOL. 01',
-      tagline: 'DAILY INSPIRATION / 每日晨读',
+      tagline: '',
       showAvatar: true,
       avatarUrl: '',
       avatarShape: 'circle',
       avatarSize: 56,
       articleTitle: 'Start Your Day with Calm',
-      author: 'Daily Notes',
+      author: '',
       articleContent: `Every morning gives us a **fresh start** and a new chance to shape our day. Before reaching for your phone or rushing into work, take a deep breath. Give yourself a few quiet minutes to wake up gently, listen to the world around you, and feel grateful for a new day.
 
 Pour a warm cup of coffee or tea and sit comfortably by the window. Reading just a few pages of a good book can inspire clear thoughts and awaken your mind. When you make time for simple moments, the day ahead feels much lighter and more enjoyable.
@@ -40,13 +40,13 @@ How you begin your morning often guides the rest of your day. When you start wit
     config: {
       cardHeading: '成长手记 · GROWTH FLOW',
       volume: 'VOL. 02',
-      tagline: 'LITTLE BY LITTLE / 积微成著',
+      tagline: '',
       showAvatar: true,
       avatarUrl: '',
       avatarShape: 'squircle',
       avatarSize: 56,
       articleTitle: 'The Power of Small Steps',
-      author: 'Growth Diary',
+      author: '',
       articleContent: `Big dreams are never built in a single afternoon. Instead, they are created by the **small habits** you choose to keep each day. It is easy to think that small actions do not matter, but real progress is always built quietly over time.
 
 Reading for ten minutes, writing down a new thought, or practicing a skill every day might feel modest right now. However, when you repeat these small efforts consistently, they slowly compound into **remarkable achievements** that surprise even yourself. Consistency always beats temporary enthusiasm.
@@ -72,13 +72,13 @@ Do not worry about how fast other people are moving. Keep your focus on your own
     config: {
       cardHeading: '生活随想 · SIMPLE LIFE',
       volume: 'VOL. 03',
-      tagline: 'SLOW DOWN / 感知当下',
+      tagline: '',
       showAvatar: false,
       avatarUrl: '',
       avatarShape: 'circle',
       avatarSize: 56,
       articleTitle: 'Enjoy the Simple Moments',
-      author: 'Mindful Life',
+      author: '',
       articleContent: `True happiness is rarely found in having more things. More often, it lives in the **simple moments** we tend to overlook in our busy routines. When we slow down, we begin to realize that our everyday lives are already filled with quiet beauty.
 
 Notice the warmth of the sun on your face, the aroma of fresh coffee in the kitchen, or a sincere conversation with an old friend. These small experiences do not cost anything, yet they bring a deep sense of **comfort and gratitude** that busy days cannot buy.
@@ -104,13 +104,13 @@ You do not need an extraordinary life to feel happy. Learn to pause, breathe dee
 export const INITIAL_CONFIG: CardConfig = {
   cardHeading: '请输入您的专栏标题',
   volume: 'VOL. 01',
-  tagline: 'DAILY INSPIRATION / 每日晨读',
+  tagline: '',
   showAvatar: true,
   avatarUrl: '',
   avatarShape: 'circle',
   avatarSize: 56,
   articleTitle: 'Start Your Day with Calm',
-  author: 'Daily Notes',
+  author: '',
   articleContent: `Every morning gives us a **fresh start** and a new chance to shape our day. Before reaching for your phone or rushing into work, take a deep breath. Give yourself a few quiet minutes to wake up gently, listen to the world around you, and feel grateful for a new day.
 
 Pour a warm cup of coffee or tea and sit comfortably by the window. Reading just a few pages of a good book can inspire clear thoughts and awaken your mind. When you make time for simple moments, the day ahead feels much lighter and more enjoyable.
