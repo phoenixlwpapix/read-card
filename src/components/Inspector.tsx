@@ -632,6 +632,24 @@ export const Inspector: React.FC<InspectorProps> = ({
                     </span>
                   </div>
                 </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-zinc-600 font-medium">段落间距</span>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="range"
+                      min={0}
+                      max={48}
+                      step={1}
+                      value={config.paragraphSpacing ?? 12}
+                      onChange={(e) => onChange({ paragraphSpacing: Number(e.target.value) })}
+                      className="w-24 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-amber-600"
+                    />
+                    <span className="font-mono text-zinc-900 font-semibold text-xs w-9 text-right">
+                      {config.paragraphSpacing ?? 12}px
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

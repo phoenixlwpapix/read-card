@@ -66,6 +66,7 @@ export interface CardConfig {
   fontFamily: FontFamily;
   fontSize: number;
   lineHeight: number;
+  paragraphSpacing?: number;
   fontWeight?: FontWeight;
   isBold?: boolean;
   showTexture: boolean;

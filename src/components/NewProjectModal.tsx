@@ -56,7 +56,7 @@ const OPTION_ITEMS: OptionConfig[] = [
     key: 'keepVisual',
     label: '视觉排版属性',
     badge: '推荐保留',
-    desc: '主题配色、字体、字重（500/600）、字号、行高与卡片比例',
+    desc: '主题配色、字体、字重（500/600）、字号、行高、段落间距与卡片比例',
     icon: Palette,
   },
   {

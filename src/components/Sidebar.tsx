@@ -591,7 +591,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 rows={14}
                 value={config.articleContent}
                 onChange={(e) => onChange({ articleContent: e.target.value })}
-                placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;空行分段，系统将根据所选比例自动排版与智能分页。支持 **重点高亮文字**（主题匹配底色）与 *斜体*。"
+                placeholder="在此粘贴或输入英文/中英文文章内容...&#10;&#10;回车或空行即可自动分段，系统将根据所选比例自动排版与智能分页。支持 **重点高亮文字**（主题匹配底色）与 *斜体*。"
                 className="w-full flex-1 min-h-[280px] p-3 text-xs text-zinc-800 focus:outline-hidden leading-relaxed resize-y font-serif border-0 bg-transparent"
                 spellCheck={false}
               />

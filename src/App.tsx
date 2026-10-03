@@ -29,7 +29,11 @@ export default function App() {
         if (parsed.cardHeading === '奇幻画布 · 英语精读') {
           parsed.cardHeading = '请输入您的专栏标题';
         }
-        return { ...INITIAL_CONFIG, ...parsed };
+        return {
+          ...INITIAL_CONFIG,
+          ...parsed,
+          paragraphSpacing: parsed.paragraphSpacing ?? INITIAL_CONFIG.paragraphSpacing,
+        };
       }
     } catch {
       // fallback to initial
@@ -131,7 +135,11 @@ export default function App() {
           if (idbConfig.cardHeading === '奇幻画布 · 英语精读') {
             idbConfig.cardHeading = '请输入您的专栏标题';
           }
-          setConfig((prev) => ({ ...prev, ...idbConfig }));
+          setConfig((prev) => ({
+            ...prev,
+            ...idbConfig,
+            paragraphSpacing: idbConfig.paragraphSpacing ?? INITIAL_CONFIG.paragraphSpacing,
+          }));
         } else {
           const legacyConf = localStorage.getItem(LEGACY_CONFIG_KEY);
           if (legacyConf) {
@@ -141,7 +149,13 @@ export default function App() {
                 if (parsed.cardHeading === '奇幻画布 · 英语精读') {
                   parsed.cardHeading = '请输入您的专栏标题';
                 }
-                if (isMounted) setConfig((prev) => ({ ...prev, ...parsed }));
+                if (isMounted) {
+                  setConfig((prev) => ({
+                    ...prev,
+                    ...parsed,
+                    paragraphSpacing: parsed.paragraphSpacing ?? INITIAL_CONFIG.paragraphSpacing,
+                  }));
+                }
                 await idbSet(CONFIG_KEY, parsed);
               }
             } catch {}
@@ -229,6 +243,7 @@ export default function App() {
           next.fontWeight = INITIAL_CONFIG.fontWeight;
           next.fontSize = INITIAL_CONFIG.fontSize;
           next.lineHeight = INITIAL_CONFIG.lineHeight;
+          next.paragraphSpacing = INITIAL_CONFIG.paragraphSpacing;
           next.showTexture = INITIAL_CONFIG.showTexture;
           next.textureType = INITIAL_CONFIG.textureType;
           next.textureIntensity = INITIAL_CONFIG.textureIntensity;

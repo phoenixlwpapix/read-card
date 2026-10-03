@@ -293,8 +293,13 @@ export const ReadingCard = forwardRef<HTMLDivElement, ReadingCardProps>(
             paragraphs.map((text, idx) => (
               <p
                 key={idx}
-                className="mb-5 last:mb-0 text-justify break-words"
-                style={{ textJustify: 'inter-word', fontWeight: activeWeight }}
+                className="text-justify break-words whitespace-pre-line"
+                style={{
+                  textJustify: 'inter-word',
+                  fontWeight: activeWeight,
+                  marginBottom:
+                    idx === paragraphs.length - 1 ? 0 : `${config.paragraphSpacing ?? 12}px`,
+                }}
               >
                 {renderMarkdownInline(text)}
               </p>

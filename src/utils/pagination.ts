@@ -13,7 +13,7 @@ export function usePagination(config: CardConfig) {
 
     const calculatePages = () => {
       const paragraphs = config.articleContent
-        .split(/\n\s*\n/)
+        .split(/\r?\n+/)
         .map((p) => p.trim())
         .filter(Boolean);
 
@@ -87,15 +87,16 @@ export function usePagination(config: CardConfig) {
           measure.appendChild(imgMock);
         }
 
-        for (const text of pList) {
+        const spacing = config.paragraphSpacing ?? 12;
+        pList.forEach((text, idx) => {
           const p = document.createElement('p');
           p.textContent = text
             .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
             .replace(/\*\*([^*]+)\*\*/g, '$1')
             .replace(/\*([^*]+)\*/g, '$1');
-          p.style.margin = '0 0 16px 0';
+          p.style.margin = `0 0 ${idx === pList.length - 1 ? 0 : spacing}px 0`;
           measure.appendChild(p);
-        }
+        });
 
         return measure.getBoundingClientRect().height <= availableHeight;
       };
@@ -153,6 +154,7 @@ export function usePagination(config: CardConfig) {
     config.articleContent,
     config.fontSize,
     config.lineHeight,
+    config.paragraphSpacing,
     config.fontFamily,
     config.showAvatar,
     config.author,
