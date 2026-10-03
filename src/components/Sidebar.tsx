@@ -12,6 +12,7 @@ import {
   FileText,
   SlidersHorizontal,
   FolderKanban,
+  X,
 } from 'lucide-react';
 import type { CardConfig } from '../types';
 import { optimizeImageFile } from '../utils/imageOptimizer';
@@ -25,6 +26,8 @@ interface SidebarProps {
   totalPages: number;
   currentPage: number;
   onToast?: (text: string, type?: 'success' | 'error' | 'info') => void;
+  isOpenOnMobile?: boolean;
+  onClose?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -36,6 +39,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   totalPages,
   currentPage,
   onToast,
+  isOpenOnMobile = false,
+  onClose,
 }) => {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -263,9 +268,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const avatarSizes = [40, 48, 56, 64, 72];
 
   return (
-    <aside className="w-[380px] xl:w-[410px] h-screen bg-[#fbfcfb] border-r border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-xs">
+    <aside
+      className={`
+        fixed inset-y-0 left-0 z-50 w-[88vw] max-w-[400px] xl:w-[410px] h-screen bg-[#fbfcfb] border-r border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-2xl lg:shadow-xs transition-transform duration-300 ease-out
+        lg:static lg:w-[380px] lg:translate-x-0
+        ${isOpenOnMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}
+    >
       {/* Sidebar Header */}
-      <div className="h-14 px-5 border-b border-[#e5e9e4] flex items-center justify-between shrink-0 bg-white/70 backdrop-blur-xs">
+      <div className="h-14 px-4 sm:px-5 border-b border-[#e5e9e4] flex items-center justify-between shrink-0 bg-white/70 backdrop-blur-xs">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-[#272c28] text-[#f4ce45] flex items-center justify-center shadow-xs">
             <LayoutTemplate className="w-4 h-4" />
@@ -278,16 +289,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Project Library & Built-in Samples Modal Trigger */}
-        <button
-          type="button"
-          onClick={onOpenProjectModal}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-zinc-800 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-300/40 rounded-lg transition-colors shadow-2xs"
-          title="打开项目库与精选示例"
-        >
-          <FolderKanban className="w-3.5 h-3.5 text-amber-700" />
-          <span>项目与示例</span>
-        </button>
+        <div className="flex items-center gap-1.5">
+          {/* Project Library & Built-in Samples Modal Trigger */}
+          <button
+            type="button"
+            onClick={onOpenProjectModal}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-zinc-800 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-300/40 rounded-lg transition-colors shadow-2xs cursor-pointer"
+            title="打开项目库与精选示例"
+          >
+            <FolderKanban className="w-3.5 h-3.5 text-amber-700" />
+            <span className="hidden sm:inline">项目与示例</span>
+            <span className="sm:hidden">项目</span>
+          </button>
+
+          {/* Mobile Close Button */}
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="lg:hidden p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
+              title="收起并查看预览"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main Content Area (Spacious & Scrollable) */}

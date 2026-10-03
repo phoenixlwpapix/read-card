@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { FileText, SlidersHorizontal, FolderKanban, Download } from 'lucide-react';
 import { getCardDimensions, type CardConfig, type CardProject } from './types';
 import { INITIAL_CONFIG } from './constants/samples';
 import { usePagination } from './utils/pagination';
@@ -71,6 +72,7 @@ export default function App() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isCopying, setIsCopying] = useState<boolean>(false);
+  const [mobileDrawer, setMobileDrawer] = useState<'sidebar' | 'inspector' | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   // Modal state
@@ -565,17 +567,31 @@ export default function App() {
   );
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#eef1ee]">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#eef1ee] relative">
+      {/* Mobile Drawer Backdrop */}
+      {mobileDrawer && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+          onClick={() => setMobileDrawer(null)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Left Sidebar: Content & Text Studio */}
       <Sidebar
         config={config}
         onChange={handleConfigChange}
         onRequestClearText={handleRequestClearText}
         onRequestReset={handleRequestReset}
-        onOpenProjectModal={() => setIsProjectModalOpen(true)}
+        onOpenProjectModal={() => {
+          setMobileDrawer(null);
+          setIsProjectModalOpen(true);
+        }}
         totalPages={pages.length}
         currentPage={currentPage}
         onToast={addToast}
+        isOpenOnMobile={mobileDrawer === 'sidebar'}
+        onClose={() => setMobileDrawer(null)}
       />
 
       {/* Middle: Canvas Stage */}
@@ -590,17 +606,76 @@ export default function App() {
         activeProjectName={activeProject?.name}
       />
 
-      {/* Right Sidebar: Visual & Properties Inspector (Always open by default) */}
+      {/* Right Sidebar: Visual & Properties Inspector */}
       <Inspector
         config={config}
         onChange={handleConfigChange}
-        onExportPng={handleExportPng}
-        onCopyImage={handleCopyImage}
+        onExportPng={(allPages) => {
+          setMobileDrawer(null);
+          handleExportPng(allPages);
+        }}
+        onCopyImage={() => {
+          setMobileDrawer(null);
+          handleCopyImage();
+        }}
         onRequestReset={handleRequestReset}
         isExporting={isExporting}
         isCopying={isCopying}
         totalPages={pages.length}
+        isOpenOnMobile={mobileDrawer === 'inspector'}
+        onClose={() => setMobileDrawer(null)}
       />
+
+      {/* Mobile Bottom Navigation Dock */}
+      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-t border-zinc-200/90 z-30 lg:hidden flex items-center justify-around px-2 sm:px-4 shadow-lg pb-[env(safe-area-inset-bottom)]">
+        <button
+          type="button"
+          onClick={() => setMobileDrawer(mobileDrawer === 'sidebar' ? null : 'sidebar')}
+          className={`flex flex-col items-center justify-center gap-1 flex-1 py-1 rounded-lg transition-colors cursor-pointer ${
+            mobileDrawer === 'sidebar'
+              ? 'text-amber-800 bg-amber-50 font-bold'
+              : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          <span className="text-[10px] leading-tight font-medium">正文与头像</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMobileDrawer(mobileDrawer === 'inspector' ? null : 'inspector')}
+          className={`flex flex-col items-center justify-center gap-1 flex-1 py-1 rounded-lg transition-colors cursor-pointer ${
+            mobileDrawer === 'inspector'
+              ? 'text-amber-800 bg-amber-50 font-bold'
+              : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+          }`}
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span className="text-[10px] leading-tight font-medium">视觉与排版</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setMobileDrawer(null);
+            setIsProjectModalOpen(true);
+          }}
+          className="flex flex-col items-center justify-center gap-1 flex-1 py-1 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50 transition-colors cursor-pointer"
+        >
+          <FolderKanban className="w-4 h-4 text-zinc-500" />
+          <span className="text-[10px] leading-tight font-medium">项目与示例</span>
+        </button>
+
+        <button
+          type="button"
+          disabled={isExporting}
+          onClick={() => handleExportPng(false)}
+          className="flex flex-col items-center justify-center gap-1 flex-1 py-1 rounded-lg font-semibold bg-[#252a26] text-white hover:bg-[#343b35] transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+        >
+          <Download className="w-4 h-4 text-[#f4ce45]" />
+          <span className="text-[10px] leading-tight">{isExporting ? '导出中' : '下载卡片'}</span>
+        </button>
+      </nav>
 
       {/* New Project Customizer Modal */}
       <NewProjectModal

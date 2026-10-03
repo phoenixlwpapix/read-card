@@ -11,6 +11,7 @@ import {
   Type,
   SlidersHorizontal,
   Ratio,
+  X,
 } from 'lucide-react';
 import {
   ASPECT_RATIOS,
@@ -31,6 +32,8 @@ interface InspectorProps {
   isExporting: boolean;
   isCopying: boolean;
   totalPages: number;
+  isOpenOnMobile?: boolean;
+  onClose?: () => void;
 }
 
 export const Inspector: React.FC<InspectorProps> = ({
@@ -42,6 +45,8 @@ export const Inspector: React.FC<InspectorProps> = ({
   isExporting,
   isCopying,
   totalPages,
+  isOpenOnMobile = false,
+  onClose,
 }) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,7 +104,13 @@ export const Inspector: React.FC<InspectorProps> = ({
   ];
 
   return (
-    <aside className="w-[380px] xl:w-[400px] h-screen bg-[#fbfcfb] border-l border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-xs z-10">
+    <aside
+      className={`
+        fixed inset-y-0 right-0 z-50 w-[88vw] max-w-[400px] xl:w-[400px] h-screen bg-[#fbfcfb] border-l border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-2xl lg:shadow-xs transition-transform duration-300 ease-out
+        lg:static lg:w-[380px] lg:translate-x-0
+        ${isOpenOnMobile ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+      `}
+    >
       {/* Inspector Header */}
       <div className="h-14 px-4 border-b border-[#e5e9e4] flex items-center justify-between shrink-0 bg-white/70 backdrop-blur-xs">
         <div className="flex items-center gap-2">
@@ -111,6 +122,18 @@ export const Inspector: React.FC<InspectorProps> = ({
             <p className="text-[10px] text-zinc-400">配图构图 · 色彩排版 · 导出</p>
           </div>
         </div>
+
+        {/* Mobile Close Button */}
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="lg:hidden p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
+            title="收起并查看预览"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Main Inspector Scroll Area - Displaying all controls seamlessly */}
@@ -656,7 +679,7 @@ export const Inspector: React.FC<InspectorProps> = ({
       </div>
 
       {/* Pinned Inspector Footer - Quick Export & Actions */}
-      <div className="p-4 border-t border-[#e2e6e3] bg-white space-y-2 shrink-0 shadow-lg">
+      <div className="p-4 border-t border-[#e2e6e3] bg-white space-y-2 shrink-0 shadow-lg pb-[calc(1rem+env(safe-area-inset-bottom))] lg:pb-4">
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
