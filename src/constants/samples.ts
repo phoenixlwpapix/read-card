@@ -4,22 +4,22 @@ export const DEFAULT_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.or
 
 export const SAMPLE_ARTICLES: { name: string; config: Partial<CardConfig> }[] = [
   {
-    name: '慢读之美 · The Art of Slow Reading',
+    name: '晨光阅读 · A Fresh Morning',
     config: {
-      cardHeading: 'READFLOW · 每日精读',
+      cardHeading: '晨读时刻 · MORNING READ',
       volume: 'VOL. 01',
-      tagline: 'READFLOW / DAILY PERSPECTIVE',
+      tagline: 'DAILY INSPIRATION / 每日晨读',
       showAvatar: true,
       avatarUrl: '',
       avatarShape: 'circle',
       avatarSize: 56,
-      articleTitle: 'The Art of Slow Reading in a Hurried World',
-      author: 'Marcel Proust & Henry David Thoreau',
-      articleContent: `In an era of relentless speed and endless scrolling, **slow reading** has become an act of **quiet rebellion**. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
+      articleTitle: 'Start Your Day with Calm',
+      author: 'Daily Notes',
+      articleContent: `Every morning gives us a **fresh start**. Before looking at your phone, take a deep breath and enjoy a quiet moment.
 
-When we read slowly, we listen not just to what the author is saying, but to the pauses between thoughts. We allow ideas to resonate, finding echoes in our own lived experience.
+Make a warm cup of coffee or tea. Read a few pages of a good book, or simply look out the window.
 
-"To read well, that is, to read true books in a true spirit, is a noble exercise," wrote Thoreau in Walden. Books are not commodities to be consumed in haste; they are sanctuaries waiting to be explored with deliberate care.`,
+When you begin your morning with calm, you bring that **peace and focus** into the rest of your day.`,
       showImage: false,
       theme: 'paper',
       fontFamily: 'literata',
@@ -32,26 +32,26 @@ When we read slowly, we listen not just to what the author is saying, but to the
       textureType: 'paper',
       textureIntensity: 'medium',
       showFooter: true,
-      footerText: 'ONE ARTICLE. A NEW PERSPECTIVE.',
+      footerText: 'ONE PAGE A DAY · 每日慢读一页书',
     },
   },
   {
-    name: '深度学习与心流 · Deep Work',
+    name: '持续成长 · Small Daily Steps',
     config: {
-      cardHeading: '思维漫步 · THINKING FLOW',
+      cardHeading: '成长手记 · GROWTH FLOW',
       volume: 'VOL. 02',
-      tagline: 'FOCUS DESK / COGNITIVE NOTES',
+      tagline: 'LITTLE BY LITTLE / 积微成著',
       showAvatar: true,
       avatarUrl: '',
       avatarShape: 'squircle',
       avatarSize: 56,
-      articleTitle: 'Deep Work: Cultivating Focus in a Distracted Age',
-      author: 'Cal Newport',
-      articleContent: `The ability to perform **deep work** is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy. As a consequence, the few who cultivate this skill, and then make it the core of their working life, will thrive.
+      articleTitle: 'The Power of Small Steps',
+      author: 'Growth Diary',
+      articleContent: `Big dreams are not built in a single day. They are created by the **small habits** you keep every day.
 
-Deep work is not a nostalgic luxury; it is a pragmatic necessity. To produce at your peak level you need to work for extended periods with **full concentration** on a single task free from distraction.
+Reading for ten minutes, writing down a new thought, or taking a short walk might feel simple. But day after day, they bring **real change**.
 
-True craft requires calm waters. Give your mind the stillness it deserves, and extraordinary ideas will follow naturally.`,
+Do not worry about moving fast. Just focus on taking the next small step forward.`,
       showImage: false,
       theme: 'matcha',
       fontFamily: 'literata',
@@ -64,26 +64,26 @@ True craft requires calm waters. Give your mind the stillness it deserves, and e
       textureType: 'linen',
       textureIntensity: 'medium',
       showFooter: true,
-      footerText: 'DEPTH OVER SPEED · CLARITY OVER NOISE',
+      footerText: 'KEEP GROWING · 坚持微小的力量',
     },
   },
   {
-    name: '极简生活笔记 · Minimalism',
+    name: '生活之美 · Joy in Simple Things',
     config: {
-      cardHeading: 'ESSENTIALS · 极简读本',
+      cardHeading: '生活随想 · SIMPLE LIFE',
       volume: 'VOL. 03',
-      tagline: 'CURATED ESSAYS / MINIMALISM',
+      tagline: 'SLOW DOWN / 感知当下',
       showAvatar: false,
       avatarUrl: '',
       avatarShape: 'circle',
       avatarSize: 56,
-      articleTitle: 'The Beauty of Subtracting the Non-Essential',
-      author: 'Antoine de Saint-Exupéry',
-      articleContent: `**Perfection is achieved**, not when there is nothing more to add, but when there is nothing left to take away.
+      articleTitle: 'Enjoy the Simple Moments',
+      author: 'Mindful Life',
+      articleContent: `Happiness is often found in the **simplest things** we tend to overlook.
 
-In life, as in design, we often burden ourselves with clutter under the illusion of enrichment. But true elegance lies in the courage to strip away the superfluous until only the essential remains.
+A warm cup of tea in the afternoon, a friendly chat with someone you care about, or a quiet walk under the trees.
 
-When you remove the noise, the melody of your life finally becomes audible. Every paragraph you read, every object you keep, should earn its place by serving either truth or joy.`,
+When you slow down and live in the **present moment**, everyday life becomes full of gentle joy.`,
       showImage: false,
       theme: 'minimal',
       fontFamily: 'manrope',
@@ -96,7 +96,7 @@ When you remove the noise, the melody of your life finally becomes audible. Ever
       textureType: 'none',
       textureIntensity: 'light',
       showFooter: true,
-      footerText: 'LESS IS MORE · SIMPLICITY IS SOPHISTICATION',
+      footerText: 'SLOW DOWN & SMILE · 留白与清欢',
     },
   },
 ];
@@ -104,18 +104,18 @@ When you remove the noise, the melody of your life finally becomes audible. Ever
 export const INITIAL_CONFIG: CardConfig = {
   cardHeading: '请输入您的专栏标题',
   volume: 'VOL. 01',
-  tagline: 'READFLOW / DAILY READING',
+  tagline: 'DAILY INSPIRATION / 每日晨读',
   showAvatar: true,
   avatarUrl: '',
   avatarShape: 'circle',
   avatarSize: 56,
-  articleTitle: 'The Art of Slow Reading in a Hurried World',
-  author: 'Editorial Team',
-  articleContent: `In an era of relentless speed and endless scrolling, **slow reading** has become an act of **quiet rebellion**. It is not merely about deciphering words at a leisurely pace, but about dwelling within them.
+  articleTitle: 'Start Your Day with Calm',
+  author: 'Daily Notes',
+  articleContent: `Every morning gives us a **fresh start**. Before looking at your phone, take a deep breath and enjoy a quiet moment.
 
-When we read slowly, we listen not just to what the author is saying, but to the pauses between sentences. We allow ideas to resonate, finding echoes in our own memories and convictions.
+Make a warm cup of coffee or tea. Read a few pages of a good book, or simply look out the window.
 
-"To read well, that is, to read true books in a true spirit, is a noble exercise," wrote Thoreau in Walden. Books are not information feeds to be skimmed; they are sanctuaries waiting to be explored with patient, undivided attention.`,
+When you begin your morning with calm, you bring that **peace and focus** into the rest of your day.`,
   showImage: false,
   imageUrl: '',
   imagePosition: 'top-banner',
