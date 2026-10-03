@@ -9,6 +9,7 @@ import { Inspector } from './components/Inspector';
 import { ProjectModal } from './components/ProjectModal';
 import { SaveProjectModal } from './components/SaveProjectModal';
 import { NewProjectModal, type NewProjectOptions } from './components/NewProjectModal';
+import { ExportPreviewModal, type ExportedCardImage } from './components/ExportPreviewModal';
 import { ConfirmModal } from './components/ConfirmModal';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 import { exportFonts } from './exportFonts';
@@ -70,6 +71,8 @@ export default function App() {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState<boolean>(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
+  const [exportedImages, setExportedImages] = useState<ExportedCardImage[]>([]);
+  const [isExportPreviewOpen, setIsExportPreviewOpen] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isCopying, setIsCopying] = useState<boolean>(false);
   const [mobileDrawer, setMobileDrawer] = useState<'sidebar' | 'inspector' | null>(null);
@@ -461,6 +464,8 @@ export default function App() {
         const count = allPages ? pages.length : 1;
         const baseName = safeFileName(config.articleTitle || config.cardHeading || 'reading-card');
 
+        const exportedList: ExportedCardImage[] = [];
+
         for (let i = 0; i < count; i++) {
           const targetIndex = allPages ? i : currentPage;
           if (allPages) {
@@ -486,16 +491,35 @@ export default function App() {
 
           if (blob) {
             const pageSuffix = `P${String(targetIndex + 1).padStart(2, '0')}`;
-            downloadBlob(blob, `${baseName}-${pageSuffix}.png`);
+            const filename = `${baseName}-${pageSuffix}.png`;
+            const url = URL.createObjectURL(blob);
+            exportedList.push({
+              blob,
+              url,
+              filename,
+              pageIndex: targetIndex,
+            });
           }
         }
 
-        addToast(
-          allPages
-            ? `已成功导出全部 ${count} 页 ${config.aspectRatio || '3:4'} 阅读卡片！`
-            : '卡片图片已成功下载！',
-          'success'
-        );
+        const isMobile = window.innerWidth < 1024 || 'ontouchstart' in window;
+
+        if (isMobile && exportedList.length > 0) {
+          // On mobile: open full-size preview & save to album modal
+          setExportedImages(exportedList);
+          setIsExportPreviewOpen(true);
+        } else {
+          // On desktop: trigger direct file download
+          exportedList.forEach((item) => {
+            downloadBlob(item.blob, item.filename);
+          });
+          addToast(
+            allPages
+              ? `已成功导出全部 ${count} 页 ${config.aspectRatio || '3:4'} 阅读卡片！`
+              : '卡片图片已成功下载！',
+            'success'
+          );
+        }
       } catch (err) {
         addToast(
           `导出图片失败: ${err instanceof Error ? err.message : '未知错误'}`,
@@ -673,9 +697,18 @@ export default function App() {
           className="flex flex-col items-center justify-center gap-1 flex-1 py-1 rounded-lg font-semibold bg-[#252a26] text-white hover:bg-[#343b35] transition-colors cursor-pointer shadow-xs disabled:opacity-50"
         >
           <Download className="w-4 h-4 text-[#f4ce45]" />
-          <span className="text-[10px] leading-tight">{isExporting ? '导出中' : '下载卡片'}</span>
+          <span className="text-[10px] leading-tight font-medium">{isExporting ? '生成中…' : '保存卡片'}</span>
         </button>
       </nav>
+
+      {/* Mobile Card Export Preview & Save to Album Modal */}
+      <ExportPreviewModal
+        isOpen={isExportPreviewOpen}
+        onClose={() => setIsExportPreviewOpen(false)}
+        images={exportedImages}
+        initialPageIndex={currentPage}
+        onToast={addToast}
+      />
 
       {/* New Project Customizer Modal */}
       <NewProjectModal
