@@ -34,6 +34,9 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
   const [fitScale, setFitScale] = useState<number>(0.55);
 
   const dimensions = getCardDimensions(config.aspectRatio);
+  const totalPages = Math.max(1, pages.length);
+  const safeCurrentPage = Math.min(currentPage, totalPages - 1);
+  const currentParagraphs = pages[safeCurrentPage] ?? [];
 
   useImperativeHandle(ref, () => ({
     getCardElement: () => cardElementRef.current,
@@ -45,8 +48,9 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const isMobile = window.innerWidth < 1024;
-      const paddingX = isMobile ? 20 : 64;
-      const paddingY = isMobile ? 28 : 64;
+      const paddingX = isMobile ? 24 : 64;
+      // On mobile: top gap (8px~14px) + bottom dock (64px) + safe bottom inset / margin (~24px)
+      const paddingY = isMobile ? (totalPages > 1 ? 124 : 100) : 64;
       const availableW = Math.max(120, rect.width - paddingX);
       const availableH = Math.max(120, rect.height - paddingY);
 
@@ -58,17 +62,17 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
 
     updateScale();
     window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, [dimensions.width, dimensions.height]);
-
-  const totalPages = Math.max(1, pages.length);
-  const safeCurrentPage = Math.min(currentPage, totalPages - 1);
-  const currentParagraphs = pages[safeCurrentPage] ?? [];
+    window.visualViewport?.addEventListener('resize', updateScale);
+    return () => {
+      window.removeEventListener('resize', updateScale);
+      window.visualViewport?.removeEventListener('resize', updateScale);
+    };
+  }, [dimensions.width, dimensions.height, totalPages]);
 
   return (
-    <main className="flex-1 h-screen flex flex-col min-w-0 bg-[#eef1ee] overflow-hidden relative">
+    <main className="flex-1 h-full flex flex-col min-w-0 bg-[#eef1ee] overflow-hidden relative">
       {/* Top Workbench Stage Toolbar */}
-      <header className="h-14 px-3 sm:px-6 border-b border-[#e1e6e0] bg-[#fbfcfb] flex items-center justify-between shrink-0 shadow-2xs z-20">
+      <header className="h-12 sm:h-14 px-3 sm:px-6 border-b border-[#e1e6e0] bg-[#fbfcfb] flex items-center justify-between shrink-0 shadow-2xs z-20">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <span className="text-xs font-bold text-zinc-800 tracking-tight shrink-0">
             卡片画板
@@ -117,7 +121,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(function Stage(
       {/* Main Canvas Area */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-auto flex items-center justify-center p-3 sm:p-8 pb-20 lg:pb-8 relative select-none"
+        className="flex-1 overflow-auto flex flex-col items-center justify-start lg:justify-center p-3 sm:p-8 pt-2 sm:pt-3.5 lg:pt-8 pb-24 lg:pb-8 relative select-none"
         style={{
           backgroundImage:
             'radial-gradient(#c5ccc4 1px, transparent 1px), radial-gradient(#d3dbd2 1px, transparent 1px)',

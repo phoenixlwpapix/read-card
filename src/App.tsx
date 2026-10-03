@@ -593,7 +593,7 @@ export default function App() {
   );
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#eef1ee] relative">
+    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#eef1ee] relative">
       {/* Mobile Drawer Backdrop */}
       {mobileDrawer && (
         <div

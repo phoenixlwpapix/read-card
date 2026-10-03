@@ -106,7 +106,7 @@ export const Inspector: React.FC<InspectorProps> = ({
   return (
     <aside
       className={`
-        fixed inset-y-0 right-0 z-50 w-[88vw] max-w-[400px] xl:w-[400px] h-screen bg-[#fbfcfb] border-l border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-2xl lg:shadow-xs transition-transform duration-300 ease-out
+        fixed inset-y-0 right-0 z-50 w-[88vw] max-w-[400px] xl:w-[400px] h-screen h-[100dvh] lg:h-full bg-[#fbfcfb] border-l border-[#e2e6e3] flex flex-col shrink-0 overflow-hidden shadow-2xl lg:shadow-xs transition-transform duration-300 ease-out
         lg:static lg:w-[380px] lg:translate-x-0
         ${isOpenOnMobile ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
       `}
