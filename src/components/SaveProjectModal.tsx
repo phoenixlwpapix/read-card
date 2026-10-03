@@ -62,7 +62,7 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
@@ -70,29 +70,29 @@ export const SaveProjectModal: React.FC<SaveProjectModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="h-16 px-6 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/70">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center shadow-2xs">
-              <FolderKanban className="w-5 h-5" />
+        <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/70">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center shadow-2xs shrink-0">
+              <FolderKanban className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-zinc-900 tracking-tight">保存卡片项目</h2>
-              <p className="text-xs text-zinc-500">将卡片文本与排版安全存入数据库，刷新不丢失</p>
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-base font-bold text-zinc-900 tracking-tight">保存卡片项目</h2>
+              <p className="text-xs text-zinc-500 hidden sm:block mt-0.5 truncate">将卡片文本与排版安全存入数据库，刷新不丢失</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 rounded-lg transition-colors cursor-pointer shrink-0"
             title="关闭"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
         {/* Body Form */}
         <form onSubmit={handleSubmit}>
-          <div className="p-6 space-y-4">
+          <div className="p-4 sm:p-6 space-y-4">
             {/* If user is editing an existing project, allow choosing Update or Save As New */}
             {isExistingUserProject && activeProjectName && (
               <div className="flex items-center gap-2 p-1 bg-zinc-100 rounded-xl border border-zinc-200 text-xs">

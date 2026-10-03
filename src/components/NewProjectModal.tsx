@@ -174,19 +174,19 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <header className="px-6 py-4.5 border-b border-zinc-100 flex items-center justify-between shrink-0 bg-zinc-50/70">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center shadow-xs shrink-0">
-              <FilePlus2 className="w-5 h-5 text-[#f4ce45]" />
+        <header className="px-4 py-3 sm:px-6 sm:py-4.5 border-b border-zinc-100 flex items-center justify-between shrink-0 bg-zinc-50/70">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center shadow-xs shrink-0">
+              <FilePlus2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#f4ce45]" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h2
                 id="new-project-modal-title"
-                className="text-base font-bold text-zinc-900 tracking-tight leading-tight"
+                className="text-sm sm:text-base font-bold text-zinc-900 tracking-tight leading-tight"
               >
                 新建卡片项目
               </h2>
-              <p className="text-xs text-zinc-500 mt-0.5">
+              <p className="text-xs text-zinc-500 mt-0.5 hidden sm:block truncate">
                 勾选您希望保留的内容与排版规范，未勾选的项将被清空
               </p>
             </div>
@@ -194,7 +194,7 @@ export const NewProjectModal: React.FC<NewProjectModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors cursor-pointer shrink-0"
             aria-label="关闭弹窗"
           >
             <X className="w-4 h-4" />
